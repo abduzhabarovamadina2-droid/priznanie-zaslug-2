@@ -27,3 +27,8 @@ desktop.ini
 # ==== Логи и временные файлы ====
 *.log
 *.tmp
+
+# ==== Backend: зависимости и локальные секреты ====
+backend/node_modules/
+backend/.env
+backend/*.log

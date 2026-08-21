@@ -1,0 +1,27 @@
+{
+  "name": "priznanie-zaslug-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Backend модуля «Признание заслуг» — Node.js + Express + PostgreSQL",
+  "main": "src/server.js",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "db:migrate": "node scripts/migrate.js up",
+    "db:migrate:status": "node scripts/migrate.js status",
+    "db:seed": "node seeds/seed-employees.js",
+    "db:seed:users": "node seeds/seed-users.js",
+    "db:seed:ratings": "node seeds/seed-ratings.js",
+    "db:seed:all": "npm run db:seed && npm run db:seed:users && npm run db:seed:ratings"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.12.0"
+  }
+}
