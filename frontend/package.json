@@ -1,0 +1,11 @@
+{
+  "name": "priznanie-zaslug-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Фронтенд модуля «Признание заслуг» — самодостаточный HTML-прототип + локальный статический сервер",
+  "scripts": {
+    "start": "node static-server.js",
+    "dev": "node static-server.js"
+  },
+  "license": "ISC"
+}

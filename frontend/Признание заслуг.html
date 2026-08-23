@@ -2238,6 +2238,8 @@ html:not(.dark) .mr-wx2{background:linear-gradient(165deg,#1d2b31 0%,#16232a 55%
 .mr-gal-tabs .tab.on{color:var(--brand-2)}
 .mr-gal-tabs .tab.on::before{background:#fff}
 .mr-gal + .mr-gal,.mr-gal + .card{margin-top:0}</style>
+<!-- Настройки окружения: адрес API. Файл может отсутствовать — тогда берётся значение по умолчанию. -->
+<script src="config.js"></script>
 </head>
 <body>
 <div id="root"></div>
@@ -2911,25 +2913,100 @@ var MR_Ava = function (p) {
   return (0, c.jsxs)("span", { className: "mr-ava", style: { width: sz, height: sz, fontSize: Math.round(sz * .36) }, children: [MR_initials(u), MR_photoImg(u)] });
 };
 
+/* Профиль из API приводим к той же форме, в которой приложение всегда
+   работало с записью из MR_USERS: остальной код менять не приходится. */
+function MR_userFromApi(u) {
+  if (!u) return null;
+  var e = u.employee || {};
+  return {
+    id: u.id,
+    tnumber: e.tnumber || "",
+    login: u.login,
+    role: u.role,
+    fio: e.fio || u.login,
+    short: e.shortName || e.fio || u.login,
+    post: e.post || "",
+    dept: e.dept || "",
+    dep: e.dep || "",
+    branch: e.branch || "",
+    group: u.groupCode || "",
+    points: typeof u.pointsBalance === "number" ? u.pointsBalance : 0,
+    permissions: u.permissions || []
+  };
+}
+
+/* Сообщение об ошибке входа: наружу только понятный текст, без подробностей. */
+function MR_loginErrorText(err) {
+  if (!err) return "Не удалось войти. Попробуйте ещё раз.";
+  if (err.kind === "auth" || err.status === 401) return "Неверный логин или пароль";
+  if (err.status === 503) return "Авторизация временно недоступна. Обратитесь к администратору.";
+  if (err.kind === "network") return "Не удалось подключиться к серверу.";
+  if (err.kind === "forbidden" || err.status === 403) return "Доступ запрещён. Учётная запись отключена или недостаточно прав.";
+  if (err.status === 400) return "Укажите логин и пароль.";
+  return "Не удалось войти. Попробуйте ещё раз.";
+}
+
 function MR_Login(props) {
   var s1 = (0, N.useState)(""), lg = s1[0], setLg = s1[1];
   var s2 = (0, N.useState)(""), pw = s2[0], setPw = s2[1];
   var s3 = (0, N.useState)(""), err = s3[0], setErr = s3[1];
   var s4 = (0, N.useState)(!1), show = s4[0], setShow = s4[1];
+  var s5 = (0, N.useState)(!1), busy = s5[0], setBusy = s5[1];
+  /* MR_USERS теперь нужен только чтобы показать список и подписи.
+     Пароль здесь не хранится и не проверяется — это делает сервер. */
   var cur = MR_USERS.find(function (v) { return v.login === lg; });
 
   var pick = function (v) {
     setLg(v);
-    var u = MR_USERS.find(function (x) { return x.login === v; });
-    setPw(u ? u.pass : "");
     setErr("");
   };
+
   var submit = function (ev) {
     ev && ev.preventDefault && ev.preventDefault();
+    if (busy) return;
     if (!lg) { setErr("Выберите учётную запись из списка."); return; }
-    var u = MR_USERS.find(function (v) { return v.login === lg && v.pass === pw; });
-    if (!u) { setErr("Неверный пароль для выбранной учётной записи."); return; }
-    setErr(""); props.onLogin(u);
+    if (!pw) { setErr("Введите пароль."); return; }
+
+    setErr(""); setBusy(!0);
+    MR_api.login({ login: lg, password: pw })
+      .then(function (data) {
+        if (!MR_token.has()) throw MR_ApiError("auth", "Сервер не выдал токен", 401);
+        /* Профиль приходит вместе с токеном. Если он неполон — спрашиваем отдельно. */
+        var u = data && data.user;
+        if (u && u.login && u.role && u.employee) return u;
+        return MR_api.me().then(function (r) { return r && r.user; });
+      })
+      .then(function (u) {
+        var normalized = MR_userFromApi(u);
+        if (!normalized) throw MR_ApiError("http", "Сервер вернул пустой профиль", 0);
+        setPw("");            /* пароль в состоянии не задерживаем */
+        /* Токен получен — забираем справочники из API до того, как покажем
+           приложение: иначе первый рендер уйдёт на данных, собранных ещё до
+           входа, а обычный массив MR_PEOPLE перерисовку сам не вызовет. */
+        return MR_reloadDirectories()
+          .then(function () {
+            /* Реестр тянем следом. 403 здесь не повод рвать сессию: у роли
+               просто нет права view — оставляем локальные заявки. */
+            return MR_loadRequests().catch(function (e) {
+              if (e && e.kind === "forbidden") MR_SRV_REQS = null;
+              console.log("Заявки из API не получены — показываем локальные");
+            });
+          })
+          .catch(function () {
+            /* Справочники не пришли — это не повод рвать сессию.
+               Токен оставляем, работаем на том, что уже загружено. */
+            if (!document.querySelector(".mr-demo-banner")) MR_demoBanner();
+          })
+          .then(function () {
+            setBusy(!1);
+            props.onLogin(normalized);
+          });
+      })
+      .catch(function (e) {
+        MR_token.clear();
+        setBusy(!1);
+        setErr(MR_loginErrorText(e));
+      });
   };
 
   return (0, c.jsxs)("div", {
@@ -2963,7 +3040,7 @@ function MR_Login(props) {
               (0, c.jsx)("span", { children: "Пароль" }),
               (0, c.jsxs)("span", {
                 className: "mr-login-pw", children: [
-                  (0, c.jsx)("input", { type: show ? "text" : "password", value: pw, autoComplete: "current-password", placeholder: lg ? "" : "Подставится после выбора логина", onChange: function (e2) { setPw(e2.target.value); setErr(""); } }),
+                  (0, c.jsx)("input", { type: show ? "text" : "password", value: pw, autoComplete: "current-password", placeholder: lg ? "Введите пароль" : "Сначала выберите учётную запись", onChange: function (e2) { setPw(e2.target.value); setErr(""); } }),
                   (0, c.jsx)("button", { type: "button", className: "mr-login-eye", onClick: function () { setShow(!show); }, title: show ? "Скрыть пароль" : "Показать пароль", children: show ? "Скрыть" : "Показать" })
                 ]
               })
@@ -2984,8 +3061,8 @@ function MR_Login(props) {
           }),
 
           err && (0, c.jsx)("div", { className: "errmsg", children: err }),
-          (0, c.jsxs)("button", { className: "btn go mr-login-go", type: "submit", children: [(0, c.jsx)(Hh, { size: 15 }), " Войти в Систему"] }),
-          (0, c.jsxs)("div", { className: "mr-login-note", children: ["Демонстрационный режим: пароль подставляется автоматически при выборе учётной записи. Заявки, справочники и рейтинг сохраняются в браузере и не теряются при перезагрузке страницы.", (0, c.jsx)("button", { type: "button", className: "mr-login-reset", onClick: MR_resetState, children: "Сбросить демонстрационные данные" })] })
+          (0, c.jsxs)("button", { className: "btn go mr-login-go", type: "submit", disabled: busy, children: [(0, c.jsx)(Hh, { size: 15 }), busy ? " Проверяем…" : " Войти в Систему"] }),
+          (0, c.jsxs)("div", { className: "mr-login-note", children: ["Вход проверяется на сервере. Выберите учётную запись и введите пароль. Заявки, справочники и рейтинг пока сохраняются в браузере.", (0, c.jsx)("button", { type: "button", className: "mr-login-reset", onClick: MR_resetState, children: "Сбросить демонстрационные данные" })] })
         ]
       })
     ]
@@ -3239,6 +3316,150 @@ function MR_Admin(props) {
    СПРАВОЧНИКИ: страница-хаб + четыре справочника
    ====================================================================== */
 /* начальные данные справочников заданы при инициализации MR_Store */
+
+/* ======================================================================
+   КЛИЕНТ REST API
+   Тонкая обёртка над fetch для перехода с localStorage на backend.
+   На этом шаге ещё никем не вызывается — подключение пойдёт дальше.
+
+   Использование:
+     await MR_api.get("/employees")
+     await MR_api.post("/requests", data)
+     await MR_api.patch("/requests/123", data)
+     await MR_api.del("/requests/123")
+
+   Ошибки не возвращаются молча, а выбрасываются объектом с полем kind:
+     "auth"      — 401, токен удалён, нужно показать экран входа
+     "forbidden" — 403, токен цел, роли не хватает прав
+     "network"   — backend недоступен
+     "http"      — прочие коды ответа
+     "parse"     — ответ пришёл, но это не JSON
+
+   Ни токен, ни пароль, ни строка подключения никуда не логируются.
+   ====================================================================== */
+/* Адрес API задаётся в config.js рядом с этим файлом (window.MR_API_BASE).
+   Если config.js не подключён — берём текущий туннель для разработки. */
+var MR_API_BASE = (typeof window !== "undefined" && window.MR_API_BASE)
+  ? String(window.MR_API_BASE).replace(/\/+$/, "")
+  : "https://starts-technician-billion-zen.trycloudflare.com/api";
+var MR_TOKEN_KEY = "mr_token";
+
+/* Токен держим отдельным ключом, а не внутри mr_state_v4: то состояние
+   целиком выгружается в state.json, и токен уехал бы в скачанный файл. */
+var MR_token = {
+  get: function () {
+    try { return window.localStorage.getItem(MR_TOKEN_KEY) || null; }
+    catch (e) { return null; }
+  },
+  set: function (value) {
+    try { if (value) window.localStorage.setItem(MR_TOKEN_KEY, value); }
+    catch (e) { /* приватный режим — просто останемся без токена */ }
+  },
+  clear: function () {
+    try { window.localStorage.removeItem(MR_TOKEN_KEY); }
+    catch (e) { /* нечего чистить */ }
+  },
+  has: function () { return !!MR_token.get(); }
+};
+
+/* Ошибка запроса. Наследуемся от Error, чтобы работал стек и instanceof. */
+function MR_ApiError(kind, message, status, details) {
+  var err = new Error(message);
+  err.name = "MR_ApiError";
+  err.kind = kind;
+  err.status = status || 0;
+  err.details = details || null;
+  err.isApiError = true;
+  return err;
+}
+
+var MR_api = {
+  base: MR_API_BASE,
+  token: MR_token,
+
+  /* Единая точка: собирает заголовки, разбирает ответ, переводит коды в ошибки. */
+  request: function (method, path, body, options) {
+    var opts = options || {};
+    var url = MR_API_BASE + path;
+    var headers = {};
+    var i, keys;
+
+    var tok = MR_token.get();
+    if (tok) headers["Authorization"] = "Bearer " + tok;
+    if (body !== undefined && body !== null) headers["Content-Type"] = "application/json";
+    if (opts.headers) {
+      keys = Object.keys(opts.headers);
+      for (i = 0; i < keys.length; i++) headers[keys[i]] = opts.headers[keys[i]];
+    }
+
+    var init = { method: method, headers: headers };
+    if (body !== undefined && body !== null) init.body = JSON.stringify(body);
+    if (opts.signal) init.signal = opts.signal;
+
+    return fetch(url, init).then(function (res) {
+      return res.text().then(function (raw) {
+        var data = null;
+        if (raw) {
+          try { data = JSON.parse(raw); }
+          catch (e) {
+            if (res.ok) throw MR_ApiError("parse", "Ответ сервера не является JSON", res.status);
+          }
+        }
+
+        if (res.ok) return data;
+
+        var msg = (data && data.error && data.error.message) || ("Ошибка запроса: " + res.status);
+        var det = (data && data.error && data.error.details) || null;
+
+        /* 401 — токен протух или его нет. Убираем его и сообщаем вызывающему,
+           что нужен вход. Никакой перезагрузки страницы: решение принимает UI. */
+        if (res.status === 401) {
+          MR_token.clear();
+          throw MR_ApiError("auth", msg || "Требуется авторизация", 401, det);
+        }
+
+        /* 403 — пользователь известен, но роли не хватает прав. Токен оставляем. */
+        if (res.status === 403) {
+          throw MR_ApiError("forbidden", msg || "Недостаточно прав", 403, det);
+        }
+
+        throw MR_ApiError("http", msg, res.status, det);
+      });
+    }, function (netErr) {
+      /* Сюда попадаем, когда запрос вообще не дошёл: сервер не запущен,
+         оборвалась сеть, запрос отменён. */
+      if (netErr && netErr.name === "AbortError") {
+        throw MR_ApiError("network", "Запрос отменён", 0);
+      }
+      throw MR_ApiError("network",
+        "Не удалось связаться с сервером " + MR_API_BASE + ". Проверьте, запущен ли backend.", 0);
+    });
+  },
+
+  get:   function (path, options)       { return MR_api.request("GET", path, null, options); },
+  post:  function (path, body, options) { return MR_api.request("POST", path, body === undefined ? {} : body, options); },
+  patch: function (path, body, options) { return MR_api.request("PATCH", path, body === undefined ? {} : body, options); },
+  del:   function (path, options)       { return MR_api.request("DELETE", path, null, options); },
+
+  /* Вход: сохраняем токен и отдаём профиль. Пароль остаётся только в аргументах.
+     Принимает и объект MR_api.login({login, password}), и два аргумента. */
+  login: function (a, b) {
+    var creds = (a && typeof a === "object") ? a : { login: a, password: b };
+    return MR_api.request("POST", "/auth/login", { login: creds.login, password: creds.password })
+      .then(function (data) {
+        if (data && data.token) MR_token.set(data.token);
+        return data;
+      });
+  },
+
+  me: function () { return MR_api.get("/auth/me"); },
+
+  /* Выход — дело клиентское: сервер токены не отзывает. */
+  logout: function () { MR_token.clear(); },
+
+  /* Проверка доступности backend. Открыта без токена. */
+  health: function () { return MR_api.get("/health"); }
+};
 
 /* ---------- сохранение состояния между сеансами ---------- */
 var MR_LS = "mr_state_v4";
@@ -4315,7 +4536,7 @@ function MR_Rating(props) {
   });
 }
 
-function vg(){let[t,l]=(0,N.useState)("home"),[a,e]=(0,N.useState)("dark"),[n,u]=(0,N.useState)(!1),[i,f]=(0,N.useState)(null),[s,A]=(0,N.useState)(!1),[h,g]=(0,N.useState)(MR_initPoints),[d,r]=(0,N.useState)(()=>MR_boot().records||[]),[MRuser,MRsetUser]=(0,N.useState)(MR_initUser),[MRovr,MRsetOvr]=(0,N.useState)(()=>MR_boot().ovr||{}),[MRdel,MRsetDel]=(0,N.useState)(()=>MR_boot().del||[]),[MRnr,MRsetNr]=(0,N.useState)(0);let MRrole=MRuser?MRuser.role:"initiator",MRlogin=m=>{MR_CUR=m,MRsetUser(m);let P=MR_boot().pts||{};g(P[m.login]!==void 0?P[m.login]:m.points),l("home"),f("Вход выполнен: "+m.short+" — "+MR_roleLabel(m.role)+".")},MRlogout=()=>{MR_CUR=null,MRsetUser(null),l("home")},MRaward=MR_awardOf(MRuser,d,MRovr,MRdel),MRnotifs=MR_notifsFor(MRuser,d,MRovr,MRdel),MRread=m=>{MR_markRead(MRuser,m),MRsetNr(v=>v+1)},MRreadAll=()=>{MR_markAllRead(MRuser,MRnotifs),MRsetNr(v=>v+1)},MRopenNotif=m=>{m.go&&MR_nav(MRrole).some(v=>v.key===m.go)&&l(m.go)};(0,N.useEffect)(()=>{let P=MR_boot().pts||{};MRuser&&(P[MRuser.login]=h),MR_persist({records:d,ovr:MRovr,del:MRdel,user:MRuser?MRuser.login:null,pts:P})},[d,MRovr,MRdel,MRuser,h,MRnr,t]),(0,N.useEffect)(()=>{document.documentElement.classList.toggle("dark",a==="dark")},[a]),(0,N.useEffect)(()=>{if(!i)return;let m=setTimeout(()=>f(null),2600);return()=>clearTimeout(m)},[i]);let b=(MR_navAll().find(m=>m.key===t)||{}).label||"",[B,U]=(0,N.useState)(!1);(0,N.useEffect)(()=>{let m=()=>U(window.scrollY>8);return m(),window.addEventListener("scroll",m,{passive:!0}),()=>window.removeEventListener("scroll",m)},[]);if(!MRuser)return(0,c.jsx)(MR_Login,{onLogin:MRlogin});return(0,c.jsxs)("div",{className:"shell",children:[(0,c.jsx)(fg,{active:t,setActive:l,theme:a,setTheme:e,collapsed:n,setCollapsed:u,role:MRrole,user:MRuser}),(0,c.jsxs)("div",{className:"main-col",children:[(0,c.jsxs)("div",{className:`topdock${B?" stuck":""}`,children:[(0,c.jsx)("div",{className:"hero-slot",children:(0,c.jsx)(sg,{onAward:()=>{MRaward?A(!0):f("У Вас пока нет полученных наград.")},onOpenAccount:()=>l("lk"),user:MRuser,onLogout:MRlogout,notifs:MRnotifs,onRead:MRread,onReadAll:MRreadAll,onOpen:MRopenNotif,hasAward:!!MRaward})}),(0,c.jsx)(Ag,{})]}),(0,c.jsxs)("main",{className:"page",children:[(0,c.jsxs)("div",{className:"page-head",children:[(0,c.jsxs)("div",{children:[(0,c.jsx)("div",{className:"crumbs",children:t==="lk"||t==="home"?(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("span",{children:"Цифровое ядро НБРК"}),(0,c.jsx)("span",{children:"/"}),(0,c.jsx)("b",{children:t==="lk"?"Личный кабинет":"Главная"})]}):(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("span",{children:ye.label}),(0,c.jsx)("span",{children:"/"}),MR_navParent(t)?(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("span",{children:MR_navParent(t).label}),(0,c.jsx)("span",{children:"/"})]}):null,(0,c.jsx)("b",{children:b})]})}),(0,c.jsx)("h1",{className:"page-title",children:t==="lk"?"Личный кабинет":t==="zaslugi"?"Выражение благодарности":t==="refs"?"Справочники":b})]}),(0,c.jsxs)("div",{className:"head-actions",children:[t==="zaslugi"&&(0,c.jsxs)("div",{className:"points",children:["Доступные баллы на текущий месяц: ",(0,c.jsx)($h,{value:h})]}),t!=="about"&&t!=="lk"&&t!=="home"&&(0,c.jsxs)("div",{className:"toolbar-actions",children:[(t==="zaslugi"||t==="faq")&&(0,c.jsxs)("button",{className:"btn",onClick:()=>{let R2=t==="faq"?[["Вопрос","Ответ"]].concat(MR_faqPairs()):[["№","Заявка","Дата","Работник","Подразделение","Номинация","Заслуга","Инициатор","Статус"]].concat(MR_buildReqs(d,MRovr,MRdel).map((v,k)=>[k+1,v.id,v.date,v.emp,v.dept,v.nomination,v.merit,v.initiator,(ts[v.status]||{}).label||v.status]));f(MR_exportXlsx(R2,t==="faq"?"Вопрос-ответ.xlsx":"Признание_заслуг_заявки.xlsx")?"Данные выгружены в файл .xlsx.":"Не удалось сформировать файл .xlsx.")},children:[(0,c.jsx)(Qh,{size:14}),(0,c.jsx)("span",{className:"lbl",children:"Экспорт .xlsx"})]})]})]})]}),t==="lk"&&(0,c.jsx)(Fh,{points:h,user:MRuser,records:d,ovr:MRovr,del:MRdel}),t==="home"&&(0,c.jsx)(MR_Home,{onGo:l,toast:f,records:d,ovr:MRovr,del:MRdel}),t==="about"&&(0,c.jsx)(Jh,{}),t==="zaslugi"&&(0,c.jsx)(cg,{points:h,setPoints:g,records:d,setRecords:r,toast:f,ovr:MRovr,setOvr:MRsetOvr,del:MRdel,setDel:MRsetDel,role:MRrole}),t==="faq"&&(0,c.jsx)(ig,{}),t==="rating"&&(0,c.jsx)(MR_Rating,{records:d,ovr:MRovr,del:MRdel,toast:f}),t==="refs"&&(0,c.jsx)(MR_Refs,{role:MRrole,toast:f}),t==="admin"&&(0,c.jsx)(MR_Admin,{role:MRrole,records:d,ovr:MRovr,setOvr:MRsetOvr,del:MRdel,setDel:MRsetDel,toast:f}),(0,c.jsx)("footer",{className:"foot",children:"Дизайн v2.4 \xB7 SOC2 Type II Сертификация \xB7 Обработка данных \xB7 \xA9 2026 Абдужабарова Мадина."})]})]}),s&&MRaward&&(0,c.jsx)(_h,{onClose:()=>A(!1),grant:MRaward}),i&&(0,c.jsxs)("div",{className:"toast anim-fade",children:[(0,c.jsx)(es,{size:16}),i]})]})}function MR_isMe(fio){return !!(MR_CUR&&fio===MR_CUR.fio)}
+function vg(){let[t,l]=(0,N.useState)("home"),[a,e]=(0,N.useState)("dark"),[n,u]=(0,N.useState)(!1),[i,f]=(0,N.useState)(null),[s,A]=(0,N.useState)(!1),[h,g]=(0,N.useState)(MR_initPoints),[d,r]=(0,N.useState)(()=>MR_boot().records||[]),[MRuser,MRsetUser]=(0,N.useState)(MR_initUser),[MRovr,MRsetOvr]=(0,N.useState)(()=>MR_boot().ovr||{}),[MRdel,MRsetDel]=(0,N.useState)(()=>MR_boot().del||[]),[MRnr,MRsetNr]=(0,N.useState)(0);let MRreqs=MR_SRV_REQS!==null?MR_SRV_REQS.concat(d):d;let MRrole=MRuser?MRuser.role:"initiator",MRlogin=m=>{MR_CUR=m,MRsetUser(m);let P=MR_boot().pts||{};g(P[m.login]!==void 0?P[m.login]:m.points),l("home"),f("Вход выполнен: "+m.short+" — "+MR_roleLabel(m.role)+".")},MRlogout=()=>{MR_api.logout(),MR_CUR=null,MRsetUser(null),l("home")},MRaward=MR_awardOf(MRuser,MRreqs,MRovr,MRdel),MRnotifs=MR_notifsFor(MRuser,MRreqs,MRovr,MRdel),MRread=m=>{MR_markRead(MRuser,m),MRsetNr(v=>v+1)},MRreadAll=()=>{MR_markAllRead(MRuser,MRnotifs),MRsetNr(v=>v+1)},MRopenNotif=m=>{m.go&&MR_nav(MRrole).some(v=>v.key===m.go)&&l(m.go)};(0,N.useEffect)(()=>{let P=MR_boot().pts||{};MRuser&&(P[MRuser.login]=h),MR_persist({records:d,ovr:MRovr,del:MRdel,user:MRuser?MRuser.login:null,pts:P})},[d,MRovr,MRdel,MRuser,h,MRnr,t]),(0,N.useEffect)(()=>{document.documentElement.classList.toggle("dark",a==="dark")},[a]),(0,N.useEffect)(()=>{if(!i)return;let m=setTimeout(()=>f(null),2600);return()=>clearTimeout(m)},[i]);let b=(MR_navAll().find(m=>m.key===t)||{}).label||"",[B,U]=(0,N.useState)(!1);(0,N.useEffect)(()=>{let m=()=>U(window.scrollY>8);return m(),window.addEventListener("scroll",m,{passive:!0}),()=>window.removeEventListener("scroll",m)},[]);if(!MRuser)return(0,c.jsx)(MR_Login,{onLogin:MRlogin});return(0,c.jsxs)("div",{className:"shell",children:[(0,c.jsx)(fg,{active:t,setActive:l,theme:a,setTheme:e,collapsed:n,setCollapsed:u,role:MRrole,user:MRuser}),(0,c.jsxs)("div",{className:"main-col",children:[(0,c.jsxs)("div",{className:`topdock${B?" stuck":""}`,children:[(0,c.jsx)("div",{className:"hero-slot",children:(0,c.jsx)(sg,{onAward:()=>{MRaward?A(!0):f("У Вас пока нет полученных наград.")},onOpenAccount:()=>l("lk"),user:MRuser,onLogout:MRlogout,notifs:MRnotifs,onRead:MRread,onReadAll:MRreadAll,onOpen:MRopenNotif,hasAward:!!MRaward})}),(0,c.jsx)(Ag,{})]}),(0,c.jsxs)("main",{className:"page",children:[(0,c.jsxs)("div",{className:"page-head",children:[(0,c.jsxs)("div",{children:[(0,c.jsx)("div",{className:"crumbs",children:t==="lk"||t==="home"?(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("span",{children:"Цифровое ядро НБРК"}),(0,c.jsx)("span",{children:"/"}),(0,c.jsx)("b",{children:t==="lk"?"Личный кабинет":"Главная"})]}):(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("span",{children:ye.label}),(0,c.jsx)("span",{children:"/"}),MR_navParent(t)?(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("span",{children:MR_navParent(t).label}),(0,c.jsx)("span",{children:"/"})]}):null,(0,c.jsx)("b",{children:b})]})}),(0,c.jsx)("h1",{className:"page-title",children:t==="lk"?"Личный кабинет":t==="zaslugi"?"Выражение благодарности":t==="refs"?"Справочники":b})]}),(0,c.jsxs)("div",{className:"head-actions",children:[t==="zaslugi"&&(0,c.jsxs)("div",{className:"points",children:["Доступные баллы на текущий месяц: ",(0,c.jsx)($h,{value:h})]}),t!=="about"&&t!=="lk"&&t!=="home"&&(0,c.jsxs)("div",{className:"toolbar-actions",children:[(t==="zaslugi"||t==="faq")&&(0,c.jsxs)("button",{className:"btn",onClick:()=>{let R2=t==="faq"?[["Вопрос","Ответ"]].concat(MR_faqPairs()):[["№","Заявка","Дата","Работник","Подразделение","Номинация","Заслуга","Инициатор","Статус"]].concat(MR_buildReqs(MRreqs,MRovr,MRdel).map((v,k)=>[k+1,v.id,v.date,v.emp,v.dept,v.nomination,v.merit,v.initiator,(ts[v.status]||{}).label||v.status]));f(MR_exportXlsx(R2,t==="faq"?"Вопрос-ответ.xlsx":"Признание_заслуг_заявки.xlsx")?"Данные выгружены в файл .xlsx.":"Не удалось сформировать файл .xlsx.")},children:[(0,c.jsx)(Qh,{size:14}),(0,c.jsx)("span",{className:"lbl",children:"Экспорт .xlsx"})]})]})]})]}),t==="lk"&&(0,c.jsx)(Fh,{points:h,user:MRuser,records:MRreqs,ovr:MRovr,del:MRdel}),t==="home"&&(0,c.jsx)(MR_Home,{onGo:l,toast:f,records:MRreqs,ovr:MRovr,del:MRdel}),t==="about"&&(0,c.jsx)(Jh,{}),t==="zaslugi"&&(0,c.jsx)(cg,{points:h,setPoints:g,records:MRreqs,setRecords:r,toast:f,ovr:MRovr,setOvr:MRsetOvr,del:MRdel,setDel:MRsetDel,role:MRrole}),t==="faq"&&(0,c.jsx)(ig,{}),t==="rating"&&(0,c.jsx)(MR_Rating,{records:MRreqs,ovr:MRovr,del:MRdel,toast:f}),t==="refs"&&(0,c.jsx)(MR_Refs,{role:MRrole,toast:f}),t==="admin"&&(0,c.jsx)(MR_Admin,{role:MRrole,records:MRreqs,ovr:MRovr,setOvr:MRsetOvr,del:MRdel,setDel:MRsetDel,toast:f}),(0,c.jsx)("footer",{className:"foot",children:"Дизайн v2.4 \xB7 SOC2 Type II Сертификация \xB7 Обработка данных \xB7 \xA9 2026 Абдужабарова Мадина."})]})]}),s&&MRaward&&(0,c.jsx)(_h,{onClose:()=>A(!1),grant:MRaward}),i&&(0,c.jsxs)("div",{className:"toast anim-fade",children:[(0,c.jsx)(es,{size:16}),i]})]})}function MR_isMe(fio){return !!(MR_CUR&&fio===MR_CUR.fio)}
 function MR_applyDir(j){
 if(!j||typeof j!=="object")throw new Error("bad json");
 var P=j.people,U=j.users;
@@ -4340,23 +4561,201 @@ function MR_demoBanner(){
     document.body.appendChild(b);
   }catch(e){}
 }
+/* ---------- адаптеры ответов API к формату, который ждёт приложение ----------
+   Меняем только форму данных на входе. MR_applyDir и MR_applyRating
+   остаются как есть — их внутренняя логика не трогается. */
+
+/* GET /api/employees -> items[] -> формат people из employees.json */
+function MR_apiEmployeesToPeople(items) {
+  return (items || []).map(function (e) {
+    return {
+      tnumber: e.tnumber || "",
+      fio: e.fio,
+      post: e.post,
+      branch: e.branch,
+      dep: e.dep,
+      dept: e.dept,
+      n: e.seed_badges || 0
+    };
+  });
+}
+
+/* GET /api/ratings -> items[] -> формат строк Рейтинг.json (русские ключи) */
+function MR_apiRatingsToRows(items) {
+  return (items || []).map(function (r) {
+    var o = {};
+    o.tnumber = r.tnumber || "";
+    o["ФИО работника"] = r.fio || "";
+    o["Суммарный балл за первый квартал"] = r.q1_points || 0;
+    o["Суммарный балл за второй квартал"] = r.q2_points || 0;
+    o["Суммарный балл за третий квартал"] = r.q3_points || 0;
+    o["Суммарный балл за четвертый квартал"] = r.q4_points || 0;
+    o["Балл за год"] = r.year_points || 0;
+    o["Кол-во золотых бэйджев"] = r.gold_badges || 0;
+    o["Кол-во серебряных бэйджев"] = r.silver_badges || 0;
+    o["Кол-во бронзовых бэйджев"] = r.bronze_badges || 0;
+    o["Кол-во зеленых бэйджев"] = r.green_badges || 0;
+    o["Кол-во синих бэйджев"] = r.blue_badges || 0;
+    o["Кол-во жёлтых бэйджев"] = r.yellow_badges || 0;
+    return o;
+  });
+}
+
+/* Постраничная выборка: у /employees в ответе есть total, у /ratings его нет,
+   поэтому там идём, пока страница приходит полной. */
+function MR_apiFetchAll(path, pageSize) {
+  var size = pageSize || 200;
+  var acc = [];
+  function page(offset) {
+    var sep = path.indexOf("?") >= 0 ? "&" : "?";
+    return MR_api.get(path + sep + "limit=" + size + "&offset=" + offset).then(function (res) {
+      var items = (res && res.items) || [];
+      acc = acc.concat(items);
+      var total = res && typeof res.total === "number" ? res.total : null;
+      var more = total !== null ? acc.length < total : items.length === size;
+      if (more && items.length) return page(offset + items.length);
+      return acc;
+    });
+  }
+  return page(0);
+}
+
+/* Перезагрузка справочников после входа.
+
+   Справочники закрыты правами view и reports, поэтому при старте без токена
+   приложение поднимается на файлах или встроенных данных. Как только вход
+   выполнен, забираем те же данные из API и переприменяем их существующими
+   MR_applyDir и MR_applyRating — новых адаптеров и второго клиента не заводим.
+
+   Про гонку: форма входа рисуется внутри go(), то есть уже после того, как
+   стартовая загрузка применила свои данные. Поэтому перезаписать свежие
+   данные старыми стартовая цепочка не может. Флаг MR_dataGen оставлен
+   страховкой на случай, если порядок когда-нибудь поменяют. */
+var MR_dataGen = 0;
+
+/* ---------- заявки из API ----------
+   Серверный реестр держим отдельно от локального: localStorage до шага 5
+   остаётся запасным хранилищем, и записывать в него ответы сервера нельзя —
+   иначе первый же пустой ответ затёр бы всё, что человек создал локально.
+
+   MR_SRV_REQS === null  — с сервера ещё не читали, работаем на localStorage
+   MR_SRV_REQS === []    — сервер ответил, заявок там нет (сейчас именно так) */
+var MR_SRV_REQS = null;
+
+/* ISO-дата сервера -> формат, в котором даты лежат в записях приложения. */
+function MR_apiDate(iso) {
+  if (!iso) return "";
+  var d = new Date(iso);
+  if (isNaN(d.getTime())) return String(iso);
+  var p = function (n) { return (n < 10 ? "0" : "") + n; };
+  return p(d.getDate()) + "." + p(d.getMonth() + 1) + "." + d.getFullYear()
+    + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+}
+
+/* GET /api/requests -> items[] -> формат записи, который принимает MR_reqBase.
+   Единственное место преобразования: дублировать его нигде не нужно. */
+function MR_apiRequestsToRecords(items) {
+  return (items || []).map(function (r) {
+    return {
+      id: r.request_no || ("ЗС-" + r.id),
+      srvId: r.id,                       /* пригодится на шаге 5 для PATCH */
+      status: r.status_ui_key || "pending",
+      tnumber: r.tnumber || "",
+      emp: r.employee_fio || "",
+      post: r.employee_post || "",
+      dept: r.employee_dept || "",
+      initiator: r.initiator_login || "",
+      date: MR_apiDate(r.created_at),
+      comment: r.merit_text || r.comment || "",
+      merit: r.merit_text || "",
+      nomination: r.nomination || "",
+      badge: r.nomination || "",
+      doc: r.doc_name || null,
+      cost: r.points || 0
+    };
+  });
+}
+
+/* Читает реестр с сервера. Ошибку наружу не гасит: вызывающий решает,
+   показать сообщение или промолчать. */
+function MR_loadRequests() {
+  return MR_apiFetchAll("/requests").then(function (items) {
+    MR_SRV_REQS = MR_apiRequestsToRecords(items);
+    MR_VER++;
+    console.log("Реестр заявок из API: " + MR_SRV_REQS.length);
+    return MR_SRV_REQS.length;
+  });
+}
+
+function MR_reloadDirectories() {
+  var gen = ++MR_dataGen;
+  return MR_apiFetchAll("/employees").then(function (items) {
+    if (gen !== MR_dataGen) return false;
+    /* users API не отдаёт — переносим текущие. Копия обязательна:
+       MR_applyDir очищает MR_USERS перед заполнением. */
+    MR_applyDir({ people: MR_apiEmployeesToPeople(items), users: MR_USERS.slice() });
+    return MR_apiFetchAll("/ratings").then(function (rows) {
+      if (gen !== MR_dataGen) return false;
+      MR_applyRating(MR_apiRatingsToRows(rows));
+      MR_VER++;   /* существующий счётчик: сбрасывает useMemo рейтинга и доски */
+      /* Данные теперь из API — плашка про демонстрационные больше не верна. */
+      var banner = document.querySelector(".mr-demo-banner");
+      if (banner && banner.parentNode) banner.parentNode.removeChild(banner);
+      console.log("После входа обновлено из API: " + MR_PEOPLE.length + " people, "
+        + Object.keys(MR_RATING || {}).length + " записей рейтинга");
+      return true;
+    });
+  });
+}
+
 function MR_mount(){(0,c1.createRoot)(document.getElementById("root")).render((0,c.jsx)(vg,{}))}
 (function(){
 var done=!1,go=function(m,demo){if(done)return;done=!0;console.log(m);MR_mount();if(demo)MR_demoBanner()};
 if(typeof fetch!="function"||location.protocol==="file:"){go("встроенные данные",1);return}
-try{
-fetch("employees.json",{cache:"no-store"})
-.then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()})
-.then(function(j){
-  var m="employees.json: "+MR_applyDir(j);
-  return fetch("Рейтинг.json",{cache:"no-store"})
+
+/* 1) Основной источник — REST API. Требует токен: справочники закрыты
+      правами view и reports, поэтому до входа их не отдадут. */
+function fromApi(){
+  if(!MR_token.has()) return Promise.reject(new Error("нет токена"));
+  return MR_apiFetchAll("/employees").then(function(items){
+    /* users API не отдаёт — оставляем те, что уже есть. Передаём копию:
+       MR_applyDir очищает MR_USERS перед заполнением, и передача самого
+       массива обнулила бы его. */
+    var m = "API /employees: " + MR_applyDir({ people: MR_apiEmployeesToPeople(items), users: MR_USERS.slice() });
+    return MR_apiFetchAll("/ratings").then(function(rows){
+      var m2 = m + "; API /ratings: " + MR_applyRating(MR_apiRatingsToRows(rows)) + " записей";
+      /* Реестр заявок не критичен для запуска: не смогли прочитать — идём дальше. */
+      return MR_loadRequests().then(function(n){ return m2 + "; API /requests: " + n; })
+                              .catch(function(){ return m2 + "; заявки из API не прочитаны"; });
+    });
+  });
+}
+
+/* 2) Запасной источник — те же JSON-файлы, что и раньше. */
+function fromFiles(){
+  return fetch("employees.json",{cache:"no-store"})
     .then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()})
-    .then(function(rj){go(m+"; Рейтинг.json: "+MR_applyRating(rj)+" записей")})
-    .catch(function(){go(m+"; Рейтинг.json не загружен — баллы демонстрационные")});
-})
-.catch(function(){go("встроенные данные",1)})
+    .then(function(j){
+      var m="employees.json: "+MR_applyDir(j);
+      return fetch("Рейтинг.json",{cache:"no-store"})
+        .then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()})
+        .then(function(rj){return m+"; Рейтинг.json: "+MR_applyRating(rj)+" записей"})
+        .catch(function(){return m+"; Рейтинг.json не загружен — баллы демонстрационные"});
+    });
+}
+
+try{
+  fromApi()
+    .then(function(m){ go(m); })
+    .catch(function(){
+      /* 3) API не ответил или входа ещё не было — работаем как прежде. */
+      fromFiles()
+        .then(function(m){ go(m+" (источник: файлы, API недоступен)",1); })
+        .catch(function(){ go("встроенные данные",1); });
+    });
 }catch(e){go("встроенные данные",1)}
-})();})();
+})();
+})();
 /*! Bundled license information:
 
 react/cjs/react.production.js:
@@ -4418,3 +4817,4 @@ react/cjs/react-jsx-runtime.production.js:
 </script>
 </body>
 </html>
+

@@ -1,0 +1,73 @@
+# ---------------------------------------------------------------
+# Стенд модуля «Признание заслуг»: PostgreSQL + API + nginx.
+#
+#   cp .env.example .env   # и заполнить пароль с JWT_SECRET
+#   docker compose up -d --build
+#   docker compose run --rm api npm run db:migrate
+#   docker compose run --rm api npm run db:seed:all
+#
+# Наружу торчит только nginx (WEB_PORT). База и API — во внутренней сети.
+# ---------------------------------------------------------------
+name: priznanie-zaslug
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-priznanie_zaslug}
+      POSTGRES_USER: ${POSTGRES_USER:-priznanie}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD не задан в .env}
+      # Кириллица в данных: явная кодировка и сортировка.
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+      TZ: ${TZ:-Asia/Almaty}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-priznanie} -d ${POSTGRES_DB:-priznanie_zaslug}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [internal]
+
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/backend.Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: "4000"
+      DATABASE_URL: postgresql://${POSTGRES_USER:-priznanie}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-priznanie_zaslug}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET не задан в .env}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+      # Фронтенд ходит в API через тот же домен (nginx), CORS нужен только
+      # если фронтенд вынесен на другой адрес — тогда допишите его сюда.
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:8080}
+      SEED_EMPLOYEES_PATH: /frontend/employees.json
+      SEED_RATINGS_PATH: /frontend/Рейтинг.json
+      TZ: ${TZ:-Asia/Almaty}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [internal]
+
+  web:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    volumes:
+      - ../frontend:/usr/share/nginx/html:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      # Прод-настройки фронтенда кладём поверх файла из репозитория.
+      - ./nginx/config.prod.js:/usr/share/nginx/html/config.js:ro
+    depends_on:
+      - api
+    networks: [internal]
+
+volumes:
+  pgdata:
+
+networks:
+  internal:
