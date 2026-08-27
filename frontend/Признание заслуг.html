@@ -2261,7 +2261,7 @@ Error generating stack: `+e.message+`
   var src=MR_USERS.find(function(u){return u.short===v.initiator||u.fio===v.initiator});
   return {tier:(n&&n.art)?n.art.tier:"GOLD",from:v.initiator,dept:src?src.dept:"Национальный Банк Республики Казахстан",reason:v.meritText||v.merit||"—"};
 }
-function _h({onClose:t,grant:MRg}){let Sx=MRg||Sn;let l=(0,N.useRef)(null);Ph(l,!0);let[a,e]=(0,N.useState)(nc),n=(0,N.useRef)(null);(0,N.useEffect)(()=>(nc&&(n.current=n1()),()=>{n.current&&(n.current(),n.current=null)}),[]);let u=()=>{let s=!nc;nc=s,e(s),s?n.current=n1():n.current&&(n.current(),n.current=null)},i=fc.find(s=>s.tier===Sx.tier),f=Sx.from.split(" ").slice(0,2).map(s=>s[0]).join("");return(0,N.useEffect)(()=>{let s=A=>{A.key==="Escape"&&t()};return document.addEventListener("keydown",s),()=>document.removeEventListener("keydown",s)},[t]),(0,c.jsxs)("div",{className:"celeb",children:[(0,c.jsx)("div",{className:"celeb-bg",onClick:t}),(0,c.jsx)("canvas",{className:"celeb-canvas",ref:l}),(0,c.jsxs)("div",{className:"celeb-card",children:[(0,c.jsx)("button",{className:"celeb-sound",onClick:u,"aria-pressed":a,title:a?"Выключить звук":"Включить звук",children:a?(0,c.jsx)(wh,{size:16}):(0,c.jsx)(xh,{size:16})}),(0,c.jsx)("button",{className:"celeb-close",onClick:t,title:"Закрыть",children:(0,c.jsx)(i1,{size:17})}),(0,c.jsxs)("div",{className:"celeb-stage",children:[(0,c.jsxs)("div",{className:"celeb-halo",children:[(0,c.jsx)("div",{className:"celeb-glowpool"}),(0,c.jsx)("div",{className:"celeb-rays"}),(0,c.jsx)("div",{className:"celeb-ring"}),(0,c.jsx)("div",{className:"celeb-ring r2"}),(0,c.jsx)("div",{className:"celeb-ring r3"})]}),(0,c.jsx)("div",{className:"celeb-badge",children:(0,c.jsx)(r1,{b:i})})]}),(0,c.jsx)("div",{className:"celeb-line",style:{animationDelay:".55s"},children:(0,c.jsxs)("span",{className:"celeb-kicker",children:[(0,c.jsx)(ns,{size:12}),"Вам направили благодарность"]})}),(0,c.jsx)("div",{className:"celeb-line celeb-title",style:{animationDelay:".7s"},children:"Поздравляем!"}),(0,c.jsxs)("div",{className:"celeb-line celeb-badgename",style:{animationDelay:".82s"},children:[i.name," \xB7 ",i.word]}),(0,c.jsx)("div",{className:"celeb-line celeb-desc",style:{animationDelay:".9s"},children:i.desc}),(0,c.jsxs)("div",{className:"celeb-line celeb-from",style:{animationDelay:"1s"},children:[(0,c.jsx)("span",{className:"ava",children:f}),(0,c.jsxs)("span",{style:{minWidth:0},children:[(0,c.jsx)("span",{className:"nm",style:{display:"block"},children:Sx.from}),(0,c.jsx)("span",{className:"rl",style:{display:"block"},children:Sx.dept})]})]}),(0,c.jsxs)("div",{className:"celeb-line celeb-reason",style:{animationDelay:"1.1s"},children:[(0,c.jsx)("b",{children:"За какое достижение"}),Sx.reason]}),(0,c.jsxs)("div",{className:"celeb-line celeb-actions",style:{animationDelay:"1.2s"},children:[(0,c.jsxs)("button",{className:"celeb-btn main",onClick:t,children:[(0,c.jsx)(es,{size:16}),"Спасибо!"]}),(0,c.jsx)("button",{className:"celeb-btn ghost2",onClick:t,children:"Позже"})]})]})]})}function $h({value:t}){let[l,a]=(0,N.useState)(t),e=(0,N.useRef)(t);return(0,N.useEffect)(()=>{let n=e.current,u=t;if(n===u)return;e.current=u;let i=650,f=performance.now(),s,A=h=>{let g=Math.min(1,(h-f)/i),d=1-Math.pow(1-g,3);a(Math.round(n+(u-n)*d)),g<1&&(s=requestAnimationFrame(A))};return s=requestAnimationFrame(A),()=>cancelAnimationFrame(s)},[t]),(0,c.jsx)("span",{className:"points-wrap",children:(0,c.jsx)("span",{className:"points-chip pulse-ring",children:(0,c.jsx)("span",{className:"points-num",children:l})})})}var uc=[{f:"Абдимуталип",n:"Аружан",o:"Нұрланқызы",d:"Управление финансовой отчётности Национального фонда и дочерних организаций"},{f:"Алпысбаева",n:"Жанат",o:"Бахытовна",d:"Управление методологии бухгалтерского учёта финансовых компаний"},{f:"Альжанов",n:"Бибол",o:"Хасенұлы",d:"Управление финансовой отчётности Национального фонда и дочерних организаций"},{f:"Амангелдиева",n:"Айнаш",o:"Умурзаккызы",d:"Управление финансовой отчётности Национального фонда и дочерних организаций"},{f:"Амангелдиева",n:"Әйгерім",o:"Амангелдықызы",d:"Управление методологии бухгалтерского учёта финансовых компаний"},{f:"Аметов",n:"Мұхтар",o:"Мұратұлы",d:"Управление методологии бухгалтерского учёта финансовых компаний"},{f:"Ануаров",n:"Аният",o:"Ануарович",d:"Управление генеральной бухгалтерии"},{f:"Ахтанов",n:"Азамат",o:"Полатбекұлы",d:"Управление финансовой отчётности Национального фонда и дочерних организаций"},{f:"Баденова",n:"Камила",o:"Ерікқызы",d:"Управление методологии бухгалтерского учёта финансовых компаний"},{f:"Бакытжанова",n:"Жадра",o:"Бакытжановна",d:"Управление методологии бухгалтерского учёта Национального Банка"}],tg=(t,l,a,e)=>{let n=Math.abs(t)%100,u=n%10;return n>10&&n<20?e:u>1&&u<5?a:u===1?l:e},lg=(t,l)=>t==="recognition"?"Отправить благодарность":l?`${l} ${tg(l,"запись","записи","записей")}`:"Нет записей",ag=[{key:"recognition",label:"Признание заслуг",icon:A1},{key:"project",label:"Проект",icon:qh},{key:"rejected",label:"Отклонено",icon:d1},{key:"cancelled",label:"Отменено",icon:v1},{key:"sent",label:"Исполнено",icon:m1}],ic=5,y1=t=>(t.f[0]||"")+(t.n[0]||"");function eg(p){return (0,c.jsx)(MR_Send,p)}var ng=[],ts={pending:{label:"В ожидании",cls:"rev",code:"WAIT"},sent:{label:"Исполнено",cls:"ok",code:"DONE"},withdrawn:{label:"Отменено",cls:"info",code:"CANCEL"},cancelled:{label:"Отклонено",cls:"bad",code:"REJECTED"},rejected_admin:{label:"Отклонено администратором",cls:"bad",code:"REJECTED_ADMIN"}};function na({label:t,value:l,wide:a,area:e,empty:n}){return(0,c.jsxs)("div",{className:`rq-field${a?" wide":""}`,children:[(0,c.jsx)("span",{className:"rq-label",children:t}),e?(0,c.jsx)("div",{className:`rq-area${l?"":" is-empty"}`,children:l||"Не заполнено"}):(0,c.jsx)("div",{className:`rq-value${l?"":" is-empty"}`,children:l||n||"—"})]})}function ug(p){return (0,c.jsx)(MR_Req,p)}function cg({points:t,setPoints:l,records:a,setRecords:e,toast:n,ovr:A,setOvr:h,del:MRdel,setDel:MRsetDel,role:MRrole}){let[u,i]=(0,N.useState)("recognition"),[f,s]=(0,N.useState)(null),g=(0,N.useMemo)(()=>MR_buildReqs(a,A,MRdel),[a,A,MRdel]),d=S=>g.filter(R=>S==="project"?(R.status!=="cancelled"&&R.status!=="rejected_admin"&&R.status!=="withdrawn"):S==="rejected"?(R.status==="cancelled"||R.status==="rejected_admin"):S==="sent"?R.status==="sent":S==="cancelled"?R.status==="withdrawn":!1),r=()=>{let S=new Date;return S.toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit",year:"numeric"})+" "+S.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit",second:"2-digit"})},b=(S,R,pe,MRc)=>{h(E1=>({...E1,[S.id]:{status:R,fields:(E1[S.id]||{}).fields||{},note:R==="revision"?(MRc||""):((E1[S.id]||{}).note||""),doc:(E1[S.id]||{}).doc!==void 0?(E1[S.id]||{}).doc:S.doc,history:[...S.history,{user:MR_actor(MRrole),time:r(),action:pe,comment:MRc||""}]}})),s(null),n(`Заявка ${S.id} — ${pe.toLowerCase()}.`)},B=(S,MRc)=>b(S,"cancelled","Отменено",MRc),U=(S,MRc)=>b(S,"pending","Отправлено",MRc),MRwd=(S,MRc)=>b(S,"withdrawn","Отозвано",MRc),MRap=(S,MRc)=>b(S,"sent","Согласовано",MRc),MRrm=S=>{MRsetDel(P=>P.concat([S.id])),s(null),n("Заявка "+S.id+" удалена.")},MRat=(S,NM)=>{h(E1=>({...E1,[S.id]:{status:(E1[S.id]||{}).status||S.status,note:(E1[S.id]||{}).note||S.note||"",doc:NM,history:[...((E1[S.id]||{}).history||S.history),{user:MR_actor(MRrole),time:r(),action:NM?"Приложено вложение":"Вложение удалено",comment:NM||""}]}})),n(NM?"Вложение приложено к заявке.":"Вложение удалено.")},[m,o]=(0,N.useState)(""),[v,y]=(0,N.useState)(!1),[C,z]=(0,N.useState)(null),[E,Q]=(0,N.useState)(null),[D,T]=(0,N.useState)("asc"),I=(0,N.useRef)(null),Ot=(0,N.useMemo)(()=>{let S=m.trim().toLowerCase();return S?uc.filter(R=>`${R.f} ${R.n} ${R.o} ${R.d}`.toLowerCase().includes(S)):uc},[m]),b1=(0,N.useMemo)(()=>E?[...uc].sort((S,R)=>D==="asc"?S[E].localeCompare(R[E],"ru"):R[E].localeCompare(S[E],"ru")):uc,[E,D]);(0,N.useEffect)(()=>{let S=R=>{I.current&&!I.current.contains(R.target)&&y(!1)};return document.addEventListener("mousedown",S),()=>document.removeEventListener("mousedown",S)},[]);let cs=S=>{z(S),y(!1),o("")},Cn=S=>{E===S?T(R=>R==="asc"?"desc":"asc"):(Q(S),T("asc"))},Bn=S=>E!==S?"⇅":D==="asc"?"▲":"▼",sc={recognition:0,project:d("project").length,rejected:d("rejected").length,cancelled:d("cancelled").length,sent:d("sent").length};return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("div",{className:"tabcards-wrap",children:(0,c.jsx)("div",{className:"tabcards",children:ag.map(S=>(0,c.jsxs)("button",{className:`tabcard${u===S.key?" on":""}`,onClick:()=>{i(S.key),s(null)},children:[(0,c.jsxs)("span",{className:"tc-stack","aria-hidden":"true",children:[(0,c.jsx)("i",{}),(0,c.jsx)("i",{})]}),(0,c.jsx)("span",{className:"tc-tab","aria-hidden":"true"}),(0,c.jsxs)("span",{className:"tc-body",children:[(0,c.jsx)("span",{className:"tc-sheen","aria-hidden":"true"}),(0,c.jsxs)("span",{className:"tc-row",children:[(0,c.jsx)("span",{className:"tc-ico",children:N.default.createElement(S.icon,{size:17})}),sc[S.key]>0&&(0,c.jsx)("span",{className:"tc-n",children:sc[S.key]})]}),(0,c.jsxs)("span",{className:"tc-text",children:[(0,c.jsx)("span",{className:"tc-title",children:S.label}),(0,c.jsx)("span",{className:"tc-sub",children:lg(S.key,sc[S.key])})]})]})]},S.key))})}),u==="recognition"?(0,c.jsxs)(c.Fragment,{children:[(0,c.jsxs)("div",{className:"empsearch",ref:I,children:[(0,c.jsx)(ls,{size:17}),(0,c.jsx)("input",{value:m,placeholder:"Поиск сотрудников для направления благодарности",onChange:S=>{o(S.target.value),y(!0)},onFocus:()=>y(!0)}),v&&(0,c.jsxs)("div",{className:"dd anim-scale",children:[!Ot.length&&(0,c.jsx)("div",{className:"dd-empty",children:"Ничего не найдено"}),Ot.map((S,R)=>(0,c.jsxs)("button",{className:"dd-item",onClick:()=>cs(S),children:[(0,c.jsx)("span",{className:"dd-ava",children:y1(S)}),(0,c.jsxs)("span",{children:[(0,c.jsxs)("span",{className:"dd-name",children:[S.f," ",S.n," ",S.o]}),(0,c.jsx)("span",{className:"dd-dept",children:S.d})]})]},R))]})]}),(0,c.jsx)("div",{className:"table-card",children:(0,c.jsx)("div",{className:"table-scroll",children:(0,c.jsxs)("table",{children:[(0,c.jsx)("thead",{children:(0,c.jsxs)("tr",{children:[(0,c.jsx)("th",{style:{width:56},children:"№"}),(0,c.jsxs)("th",{className:"sortable",onClick:()=>Cn("f"),children:["Фамилия ",(0,c.jsx)("span",{className:"sarr",children:Bn("f")})]}),(0,c.jsxs)("th",{className:"sortable",onClick:()=>Cn("n"),children:["Имя ",(0,c.jsx)("span",{className:"sarr",children:Bn("n")})]}),(0,c.jsxs)("th",{className:"sortable",onClick:()=>Cn("o"),children:["Отчество ",(0,c.jsx)("span",{className:"sarr",children:Bn("o")})]}),(0,c.jsxs)("th",{className:"sortable",onClick:()=>Cn("d"),children:["Подразделение ",(0,c.jsx)("span",{className:"sarr",children:Bn("d")})]}),(0,c.jsx)("th",{style:{width:220}})]})}),(0,c.jsx)("tbody",{children:b1.map((S,R)=>(0,c.jsxs)("tr",{children:[(0,c.jsx)("td",{className:"num",children:R+1}),(0,c.jsx)("td",{className:"strong",children:S.f}),(0,c.jsx)("td",{children:S.n}),(0,c.jsx)("td",{children:S.o}),(0,c.jsx)("td",{className:"dept",children:S.d}),(0,c.jsx)("td",{children:(0,c.jsxs)("button",{className:"btn-thank",onClick:()=>cs(S),children:[(0,c.jsx)(ns,{size:14})," Для направления благодарности"]})})]},R))})]})})})]}):f?(0,c.jsx)(ug,{req:f,role:MRrole,toast:n,onClose:()=>s(null),onCancel:B,onSend:U,onWithdraw:MRwd,onApprove:MRap,onDelete:MRrm,onAttach:MRat}):(0,c.jsx)("div",{className:"table-card",children:(0,c.jsx)("div",{className:"table-scroll",children:(0,c.jsxs)("table",{className:"rq-table",children:[(0,c.jsx)("thead",{children:(0,c.jsxs)("tr",{children:[(0,c.jsx)("th",{style:{width:56},children:"№"}),(0,c.jsx)("th",{children:"Заявка"}),(0,c.jsx)("th",{children:"Дата"}),(0,c.jsx)("th",{children:"Работник"}),(0,c.jsx)("th",{children:"Номинация"}),(0,c.jsx)("th",{children:"Инициатор"}),(0,c.jsx)("th",{style:{width:140},children:"Статус"}),(0,c.jsx)("th",{style:{width:52}})]})}),(0,c.jsxs)("tbody",{children:[d(u).map((S,R)=>{let pe=ts[S.status];return(0,c.jsxs)("tr",{className:"rq-row",onClick:()=>s(S),children:[(0,c.jsx)("td",{className:"num",children:R+1}),(0,c.jsx)("td",{className:"strong mono",children:S.id}),(0,c.jsx)("td",{className:"cell-date",children:S.date}),(0,c.jsx)("td",{className:"strong",children:S.emp}),(0,c.jsx)("td",{style:{color:"var(--ok-text)",fontWeight:600},children:S.nomination}),(0,c.jsx)("td",{className:"dept",children:S.initiator}),(0,c.jsx)("td",{children:(0,c.jsxs)("span",{className:`status ${pe.cls}`,children:[(0,c.jsx)("i",{}),pe.label]})}),(0,c.jsx)("td",{className:"rq-go",children:(0,c.jsx)(cc,{size:15})})]},S.id)}),!d(u).length&&(0,c.jsx)("tr",{children:(0,c.jsx)("td",{className:"empty",colSpan:"8",children:u==="rejected"?"Отклонённых заявок нет.":u==="sent"?"Исполненных заявок нет.":u==="cancelled"?"Отменённых заявок нет.":"Нет заявок."})})]})]})})}),C&&(0,c.jsx)(eg,{emp:C,points:t,onClose:()=>z(null),onSubmit:S=>{e(R=>[...R,S]),l(R=>Math.max(0,R-(S.cost||ic))),z(null),n("Заявка сформирована. Получатель получит Вашу благодарность по истечении 24 часов. В течение этого времени у Вас есть возможность отозвать заявку для корректировки.")}})]})}var Pf=[["Где можно ознакомиться с руководством пользователя модуля \xABПризнание заслуг\xBB?","Полная инструкция расположена в \xABБазе знаний\xBB в верхней части экрана на главной странице Цифрового ядра."],["Кто может участвовать в программе признания заслуг?","В программе участвуют все работники ЦА, ПП и филиалов НБРК."],["Где можно посмотреть описание бейджей?","Описание каждого бейджа указано в закладке \xABО программе\xBB."],["Может ли работник ЦА направить благодарность работнику филиала?","Да, благодарность можно направить любому работнику НБРК с обязательным указанием текста заслуги."],["Сколько бейджей можно направить за квартал?","Количество бейджей зависит от количества доступных баллов в соответствии с должностью."],["На какой период доступны мотивационные баллы?","Руководители и работники Национального Банка, в соответствии со своей должностью, владеют определённым количеством мотивационных баллов на месяц."],["Переходят ли доступные баллы работника на следующий квартал?","Нет, доступные мотивационные баллы не переносятся на следующий отчётный период."],["Что является обязательным условием при направлении признания?","При направлении бейджа предусматривается обязательное информационное сообщение — за какое конкретное достижение направлен бейдж. Это обязательное условие признания заслуг."],["Период определения рейтинга","Рейтинг определяется по итогам первого, второго и третьего кварталов отчётного года (ежеквартальный) и по итогам 11 месяцев отчётного года (ежегодный)."],["Сроки подведения итогов","Итоги подводятся автоматически: ежеквартально — первого числа месяца, следующего за отчётным кварталом; ежегодно — по состоянию на 1 декабря отчётного года (за 11 месяцев календарного года)."],["Как определяются победители и рейтинг?","Победителем определяется работник, набравший максимальное количество мотивационных баллов в отчётном периоде. Рейтинг рассчитывается отдельно среди руководителей и работников."]];function ig(){let[t,l]=(0,N.useState)(null),[a,e]=(0,N.useState)(""),n=(0,N.useMemo)(()=>{let u=a.trim().toLowerCase(),MRp=MR_faqPairs(),i=u?MRp.filter(([f,s])=>(f+" "+s).toLowerCase().includes(u)):MRp;return t&&(i=[...i].sort((f,s)=>t==="asc"?f[0].localeCompare(s[0],"ru"):s[0].localeCompare(f[0],"ru"))),i},[t,a]);return(0,c.jsxs)("div",{className:"table-card",children:[(0,c.jsxs)("div",{className:"faq-tools",children:[(0,c.jsxs)("div",{children:[(0,c.jsx)("h3",{className:"card-title",children:"Частые вопросы по программе"}),(0,c.jsxs)("div",{className:"faq-count",children:[n.length," из ",MR_faqPairs().length]})]}),(0,c.jsxs)("div",{className:"mini-search",children:[(0,c.jsx)(ls,{size:14}),(0,c.jsx)("input",{value:a,onChange:u=>e(u.target.value),placeholder:"Поиск по вопросам и ответам…"})]})]}),(0,c.jsx)("div",{className:"table-scroll",children:(0,c.jsxs)("table",{children:[(0,c.jsx)("thead",{children:(0,c.jsxs)("tr",{children:[(0,c.jsxs)("th",{className:"sortable",style:{width:"34%"},onClick:()=>l(t==="asc"?"desc":"asc"),children:["Вопрос ",(0,c.jsx)("span",{className:"sarr",children:t==="asc"?"▲":t==="desc"?"▼":"⇅"})]}),(0,c.jsx)("th",{children:"Ответ"})]})}),(0,c.jsxs)("tbody",{children:[n.map(([u,i],f)=>(0,c.jsxs)("tr",{children:[(0,c.jsx)("td",{className:"faq-q",children:u}),(0,c.jsx)("td",{className:"faq-a",children:i})]},f)),!n.length&&(0,c.jsx)("tr",{children:(0,c.jsx)("td",{className:"empty",colSpan:"2",children:"Ничего не найдено."})})]})]})})]})}function fg({active:t,setActive:l,theme:a,setTheme:e,collapsed:n,setCollapsed:u,role:MRrole,user:MRu}){let i=ye.icon,[MRop,MRsetOp]=(0,N.useState)({});return(0,c.jsxs)("aside",{className:`sidebar${n?" collapsed":""}`,children:[(0,c.jsxs)("button",{className:"sb-toggle",onClick:()=>u(f=>!f),"aria-expanded":!n,title:n?"Развернуть меню":"Свернуть меню",children:[(0,c.jsx)("span",{className:"sbt-ico",children:(0,c.jsx)(as,{size:15})}),(0,c.jsx)("span",{className:"sbt-lbl",children:n?"Развернуть":"Свернуть"})]}),(0,c.jsxs)("div",{className:"sidebar-head",children:[(0,c.jsx)("div",{className:"logo-mark",children:(0,c.jsx)(Xh,{size:22})}),!n&&(0,c.jsx)(c.Fragment,{children:(0,c.jsxs)("div",{className:"logo-text",children:[(0,c.jsx)("span",{className:"logo-word",children:"ПРИЗНАНИЕ ЗАСЛУГ"}),(0,c.jsx)("span",{className:"logo-badge",children:"v2.4 Enterprise"})]})})]}),(0,c.jsx)("nav",{className:"sidebar-nav noscroll",children:(0,c.jsxs)("div",{className:"navgroup active",children:[null,(0,c.jsx)("div",{className:"subnav",children:MR_nav(MRrole).map(f=>{let s=f.icon;if(f.kids){let ka=f.kids.some(k=>k.key===t),op=MRop[f.key]!==void 0?MRop[f.key]:ka;return(0,c.jsxs)("div",{className:`subgrp${op?" open":""}`,children:[(0,c.jsxs)("button",{className:`sub grp${ka?" sel":""}`,onClick:()=>{n?l(f.kids[0].key):MRsetOp(v=>Object.assign({},v,{[f.key]:!op}))},title:n?f.label:void 0,children:[(0,c.jsx)("span",{className:"dotico",children:(0,c.jsx)(s,{size:13})}),!n&&(0,c.jsx)("span",{className:"slbl",children:f.label}),!n&&(0,c.jsx)("span",{className:"subcar",children:(0,c.jsx)(MR_IcoArrow,{size:14})})]}),op&&!n&&(0,c.jsx)("div",{className:"subkids",children:f.kids.map(k=>(0,c.jsxs)("button",{className:`sub kid${t===k.key?" on":""}`,onClick:()=>l(k.key),children:[(0,c.jsx)("span",{className:"kiddot"}),(0,c.jsx)("span",{className:"slbl",children:k.label})]},k.key))})]},f.key)}return(0,c.jsxs)("button",{className:`sub${t===f.key?" on":""}`,onClick:()=>l(f.key),title:n?f.label:void 0,children:[(0,c.jsx)("span",{className:"dotico",children:(0,c.jsx)(s,{size:13})}),!n&&(0,c.jsx)("span",{className:"slbl",children:f.label})]},f.key)})})]})}),(0,c.jsxs)("div",{className:"sidebar-foot",children:[(0,c.jsxs)("button",{className:"theme-toggle",onClick:()=>e(a==="dark"?"light":"dark"),children:[a==="dark"?(0,c.jsx)(Oh,{size:18}):(0,c.jsx)(Yh,{size:18}),!n&&(0,c.jsx)("span",{children:a==="dark"?"Светлая тема":"Тёмная тема"}),!n&&(0,c.jsx)("span",{className:"switch",children:(0,c.jsx)("i",{})})]}),(0,c.jsxs)("button",{className:"profile",onClick:()=>l("lk"),title:"Личный кабинет",children:[(0,c.jsx)("div",{className:"profile-av",children:(0,c.jsx)(MR_Ava,{u:MRu,size:32})}),!n&&(0,c.jsxs)("div",{className:"profile-meta",children:[(0,c.jsx)("div",{className:"profile-name",children:MRu?MRu.short:""}),(0,c.jsx)("div",{className:"profile-role",children:MRu?MR_roleLabel(MRu.role):""})]}),!n&&(0,c.jsx)(s1,{size:16,style:{color:"var(--faint)",flexShrink:0}})]})]})]})}var _f=["RU","EN","KZ"];var MR_READ={};
+function _h({onClose:t,grant:MRg}){let Sx=MRg||Sn;let l=(0,N.useRef)(null);Ph(l,!0);let[a,e]=(0,N.useState)(nc),n=(0,N.useRef)(null);(0,N.useEffect)(()=>(nc&&(n.current=n1()),()=>{n.current&&(n.current(),n.current=null)}),[]);let u=()=>{let s=!nc;nc=s,e(s),s?n.current=n1():n.current&&(n.current(),n.current=null)},i=fc.find(s=>s.tier===Sx.tier),f=Sx.from.split(" ").slice(0,2).map(s=>s[0]).join("");return(0,N.useEffect)(()=>{let s=A=>{A.key==="Escape"&&t()};return document.addEventListener("keydown",s),()=>document.removeEventListener("keydown",s)},[t]),(0,c.jsxs)("div",{className:"celeb",children:[(0,c.jsx)("div",{className:"celeb-bg",onClick:t}),(0,c.jsx)("canvas",{className:"celeb-canvas",ref:l}),(0,c.jsxs)("div",{className:"celeb-card",children:[(0,c.jsx)("button",{className:"celeb-sound",onClick:u,"aria-pressed":a,title:a?"Выключить звук":"Включить звук",children:a?(0,c.jsx)(wh,{size:16}):(0,c.jsx)(xh,{size:16})}),(0,c.jsx)("button",{className:"celeb-close",onClick:t,title:"Закрыть",children:(0,c.jsx)(i1,{size:17})}),(0,c.jsxs)("div",{className:"celeb-stage",children:[(0,c.jsxs)("div",{className:"celeb-halo",children:[(0,c.jsx)("div",{className:"celeb-glowpool"}),(0,c.jsx)("div",{className:"celeb-rays"}),(0,c.jsx)("div",{className:"celeb-ring"}),(0,c.jsx)("div",{className:"celeb-ring r2"}),(0,c.jsx)("div",{className:"celeb-ring r3"})]}),(0,c.jsx)("div",{className:"celeb-badge",children:(0,c.jsx)(r1,{b:i})})]}),(0,c.jsx)("div",{className:"celeb-line",style:{animationDelay:".55s"},children:(0,c.jsxs)("span",{className:"celeb-kicker",children:[(0,c.jsx)(ns,{size:12}),"Вам направили благодарность"]})}),(0,c.jsx)("div",{className:"celeb-line celeb-title",style:{animationDelay:".7s"},children:"Поздравляем!"}),(0,c.jsxs)("div",{className:"celeb-line celeb-badgename",style:{animationDelay:".82s"},children:[i.name," \xB7 ",i.word]}),(0,c.jsx)("div",{className:"celeb-line celeb-desc",style:{animationDelay:".9s"},children:i.desc}),(0,c.jsxs)("div",{className:"celeb-line celeb-from",style:{animationDelay:"1s"},children:[(0,c.jsx)("span",{className:"ava",children:f}),(0,c.jsxs)("span",{style:{minWidth:0},children:[(0,c.jsx)("span",{className:"nm",style:{display:"block"},children:Sx.from}),(0,c.jsx)("span",{className:"rl",style:{display:"block"},children:Sx.dept})]})]}),(0,c.jsxs)("div",{className:"celeb-line celeb-reason",style:{animationDelay:"1.1s"},children:[(0,c.jsx)("b",{children:"За какое достижение"}),Sx.reason]}),(0,c.jsxs)("div",{className:"celeb-line celeb-actions",style:{animationDelay:"1.2s"},children:[(0,c.jsxs)("button",{className:"celeb-btn main",onClick:t,children:[(0,c.jsx)(es,{size:16}),"Спасибо!"]}),(0,c.jsx)("button",{className:"celeb-btn ghost2",onClick:t,children:"Позже"})]})]})]})}function $h({value:t}){let[l,a]=(0,N.useState)(t),e=(0,N.useRef)(t);return(0,N.useEffect)(()=>{let n=e.current,u=t;if(n===u)return;e.current=u;let i=650,f=performance.now(),s,A=h=>{let g=Math.min(1,(h-f)/i),d=1-Math.pow(1-g,3);a(Math.round(n+(u-n)*d)),g<1&&(s=requestAnimationFrame(A))};return s=requestAnimationFrame(A),()=>cancelAnimationFrame(s)},[t]),(0,c.jsx)("span",{className:"points-wrap",children:(0,c.jsx)("span",{className:"points-chip pulse-ring",children:(0,c.jsx)("span",{className:"points-num",children:l})})})}var uc=[{f:"Абдимуталип",n:"Аружан",o:"Нұрланқызы",d:"Управление финансовой отчётности Национального фонда и дочерних организаций"},{f:"Алпысбаева",n:"Жанат",o:"Бахытовна",d:"Управление методологии бухгалтерского учёта финансовых компаний"},{f:"Альжанов",n:"Бибол",o:"Хасенұлы",d:"Управление финансовой отчётности Национального фонда и дочерних организаций"},{f:"Амангелдиева",n:"Айнаш",o:"Умурзаккызы",d:"Управление финансовой отчётности Национального фонда и дочерних организаций"},{f:"Амангелдиева",n:"Әйгерім",o:"Амангелдықызы",d:"Управление методологии бухгалтерского учёта финансовых компаний"},{f:"Аметов",n:"Мұхтар",o:"Мұратұлы",d:"Управление методологии бухгалтерского учёта финансовых компаний"},{f:"Ануаров",n:"Аният",o:"Ануарович",d:"Управление генеральной бухгалтерии"},{f:"Ахтанов",n:"Азамат",o:"Полатбекұлы",d:"Управление финансовой отчётности Национального фонда и дочерних организаций"},{f:"Баденова",n:"Камила",o:"Ерікқызы",d:"Управление методологии бухгалтерского учёта финансовых компаний"},{f:"Бакытжанова",n:"Жадра",o:"Бакытжановна",d:"Управление методологии бухгалтерского учёта Национального Банка"}],tg=(t,l,a,e)=>{let n=Math.abs(t)%100,u=n%10;return n>10&&n<20?e:u>1&&u<5?a:u===1?l:e},lg=(t,l)=>t==="recognition"?"Отправить благодарность":l?`${l} ${tg(l,"запись","записи","записей")}`:"Нет записей",ag=[{key:"recognition",label:"Признание заслуг",icon:A1},{key:"project",label:"Проект",icon:qh},{key:"rejected",label:"Отклонено",icon:d1},{key:"cancelled",label:"Отменено",icon:v1},{key:"sent",label:"Исполнено",icon:m1}],ic=5,y1=t=>(t.f[0]||"")+(t.n[0]||"");function eg(p){return (0,c.jsx)(MR_Send,p)}var ng=[],ts={pending:{label:"В ожидании",cls:"rev",code:"WAIT"},sent:{label:"Исполнено",cls:"ok",code:"DONE"},withdrawn:{label:"Отменено",cls:"info",code:"CANCEL"},cancelled:{label:"Отклонено",cls:"bad",code:"REJECTED"},rejected_admin:{label:"Отклонено администратором",cls:"bad",code:"REJECTED_ADMIN"}};function na({label:t,value:l,wide:a,area:e,empty:n}){return(0,c.jsxs)("div",{className:`rq-field${a?" wide":""}`,children:[(0,c.jsx)("span",{className:"rq-label",children:t}),e?(0,c.jsx)("div",{className:`rq-area${l?"":" is-empty"}`,children:l||"Не заполнено"}):(0,c.jsx)("div",{className:`rq-value${l?"":" is-empty"}`,children:l||n||"—"})]})}function ug(p){return (0,c.jsx)(MR_Req,p)}function cg({points:t,setPoints:l,records:a,setRecords:e,toast:n,ovr:A,setOvr:h,del:MRdel,setDel:MRsetDel,role:MRrole}){let[u,i]=(0,N.useState)("recognition"),[f,s]=(0,N.useState)(null),g=(0,N.useMemo)(()=>MR_buildReqs(a,A,MRdel),[a,A,MRdel]),d=S=>g.filter(R=>S==="project"?(R.status!=="cancelled"&&R.status!=="rejected_admin"&&R.status!=="withdrawn"):S==="rejected"?(R.status==="cancelled"||R.status==="rejected_admin"):S==="sent"?R.status==="sent":S==="cancelled"?R.status==="withdrawn":!1),r=()=>{let S=new Date;return S.toLocaleDateString("ru-RU",{day:"2-digit",month:"2-digit",year:"numeric"})+" "+S.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit",second:"2-digit"})},bLocal=(S,R,pe,MRc)=>{h(E1=>({...E1,[S.id]:{status:R,fields:(E1[S.id]||{}).fields||{},note:R==="revision"?(MRc||""):((E1[S.id]||{}).note||""),doc:(E1[S.id]||{}).doc!==void 0?(E1[S.id]||{}).doc:S.doc,history:[...S.history,{user:MR_actor(MRrole),time:r(),action:pe,comment:MRc||""}]}})),s(null),n(`Заявка ${S.id} — ${pe.toLowerCase()}.`)},b=(S,R,pe,MRc)=>{if(!S.srvId)return bLocal(S,R,pe,MRc);MR_changeStatus(S,R,MRc).then(()=>{s(null),MR_rerender(e),MR_refreshPoints(l),n(`Заявка ${S.id} — ${pe.toLowerCase()}.`)}).catch(er=>{n(MR_errText(er))})},B=(S,MRc)=>b(S,"cancelled","Отменено",MRc),U=(S,MRc)=>b(S,"pending","Отправлено",MRc),MRwd=(S,MRc)=>b(S,"withdrawn","Отозвано",MRc),MRap=(S,MRc)=>b(S,"sent","Согласовано",MRc),MRrm=S=>{if(!S.srvId){MRsetDel(P=>P.concat([S.id])),s(null),n("Заявка "+S.id+" удалена.");return}MR_deleteRequest(S).then(()=>{s(null),MR_rerender(e),MR_refreshPoints(l),n("Заявка "+S.id+" удалена.")}).catch(er=>{n(MR_errText(er))})},MRatLocal=(S,NM)=>{h(E1=>({...E1,[S.id]:{status:(E1[S.id]||{}).status||S.status,note:(E1[S.id]||{}).note||S.note||"",doc:NM,history:[...((E1[S.id]||{}).history||S.history),{user:MR_actor(MRrole),time:r(),action:NM?"Приложено вложение":"Вложение удалено",comment:NM||""}]}})),n(NM?"Вложение приложено к заявке.":"Вложение удалено.")},MRat=(S,NM)=>{if(!S.srvId)return MRatLocal(S,NM&&NM.name?NM.name:NM);var op=NM?MR_uploadAttachment(S,NM):MR_deleteAttachment(S);op.then(()=>{MR_rerender(e),n(NM?"Вложение приложено к заявке.":"Вложение удалено.")}).catch(er=>{n(MR_errText(er))})},[m,o]=(0,N.useState)(""),[v,y]=(0,N.useState)(!1),[C,z]=(0,N.useState)(null),[E,Q]=(0,N.useState)(null),[D,T]=(0,N.useState)("asc"),I=(0,N.useRef)(null),Ot=(0,N.useMemo)(()=>{let S=m.trim().toLowerCase();return S?uc.filter(R=>`${R.f} ${R.n} ${R.o} ${R.d}`.toLowerCase().includes(S)):uc},[m]),b1=(0,N.useMemo)(()=>E?[...uc].sort((S,R)=>D==="asc"?S[E].localeCompare(R[E],"ru"):R[E].localeCompare(S[E],"ru")):uc,[E,D]);(0,N.useEffect)(()=>{let S=R=>{I.current&&!I.current.contains(R.target)&&y(!1)};return document.addEventListener("mousedown",S),()=>document.removeEventListener("mousedown",S)},[]);let cs=S=>{z(S),y(!1),o("")},Cn=S=>{E===S?T(R=>R==="asc"?"desc":"asc"):(Q(S),T("asc"))},Bn=S=>E!==S?"⇅":D==="asc"?"▲":"▼",sc={recognition:0,project:d("project").length,rejected:d("rejected").length,cancelled:d("cancelled").length,sent:d("sent").length};return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("div",{className:"tabcards-wrap",children:(0,c.jsx)("div",{className:"tabcards",children:ag.map(S=>(0,c.jsxs)("button",{className:`tabcard${u===S.key?" on":""}`,onClick:()=>{i(S.key),s(null)},children:[(0,c.jsxs)("span",{className:"tc-stack","aria-hidden":"true",children:[(0,c.jsx)("i",{}),(0,c.jsx)("i",{})]}),(0,c.jsx)("span",{className:"tc-tab","aria-hidden":"true"}),(0,c.jsxs)("span",{className:"tc-body",children:[(0,c.jsx)("span",{className:"tc-sheen","aria-hidden":"true"}),(0,c.jsxs)("span",{className:"tc-row",children:[(0,c.jsx)("span",{className:"tc-ico",children:N.default.createElement(S.icon,{size:17})}),sc[S.key]>0&&(0,c.jsx)("span",{className:"tc-n",children:sc[S.key]})]}),(0,c.jsxs)("span",{className:"tc-text",children:[(0,c.jsx)("span",{className:"tc-title",children:S.label}),(0,c.jsx)("span",{className:"tc-sub",children:lg(S.key,sc[S.key])})]})]})]},S.key))})}),u==="recognition"?(0,c.jsxs)(c.Fragment,{children:[(0,c.jsxs)("div",{className:"empsearch",ref:I,children:[(0,c.jsx)(ls,{size:17}),(0,c.jsx)("input",{value:m,placeholder:"Поиск сотрудников для направления благодарности",onChange:S=>{o(S.target.value),y(!0)},onFocus:()=>y(!0)}),v&&(0,c.jsxs)("div",{className:"dd anim-scale",children:[!Ot.length&&(0,c.jsx)("div",{className:"dd-empty",children:"Ничего не найдено"}),Ot.map((S,R)=>(0,c.jsxs)("button",{className:"dd-item",onClick:()=>cs(S),children:[(0,c.jsx)("span",{className:"dd-ava",children:y1(S)}),(0,c.jsxs)("span",{children:[(0,c.jsxs)("span",{className:"dd-name",children:[S.f," ",S.n," ",S.o]}),(0,c.jsx)("span",{className:"dd-dept",children:S.d})]})]},R))]})]}),(0,c.jsx)("div",{className:"table-card",children:(0,c.jsx)("div",{className:"table-scroll",children:(0,c.jsxs)("table",{children:[(0,c.jsx)("thead",{children:(0,c.jsxs)("tr",{children:[(0,c.jsx)("th",{style:{width:56},children:"№"}),(0,c.jsxs)("th",{className:"sortable",onClick:()=>Cn("f"),children:["Фамилия ",(0,c.jsx)("span",{className:"sarr",children:Bn("f")})]}),(0,c.jsxs)("th",{className:"sortable",onClick:()=>Cn("n"),children:["Имя ",(0,c.jsx)("span",{className:"sarr",children:Bn("n")})]}),(0,c.jsxs)("th",{className:"sortable",onClick:()=>Cn("o"),children:["Отчество ",(0,c.jsx)("span",{className:"sarr",children:Bn("o")})]}),(0,c.jsxs)("th",{className:"sortable",onClick:()=>Cn("d"),children:["Подразделение ",(0,c.jsx)("span",{className:"sarr",children:Bn("d")})]}),(0,c.jsx)("th",{style:{width:220}})]})}),(0,c.jsx)("tbody",{children:b1.map((S,R)=>(0,c.jsxs)("tr",{children:[(0,c.jsx)("td",{className:"num",children:R+1}),(0,c.jsx)("td",{className:"strong",children:S.f}),(0,c.jsx)("td",{children:S.n}),(0,c.jsx)("td",{children:S.o}),(0,c.jsx)("td",{className:"dept",children:S.d}),(0,c.jsx)("td",{children:(0,c.jsxs)("button",{className:"btn-thank",onClick:()=>cs(S),children:[(0,c.jsx)(ns,{size:14})," Для направления благодарности"]})})]},R))})]})})})]}):f?(0,c.jsx)(ug,{req:f,role:MRrole,toast:n,onClose:()=>s(null),onCancel:B,onSend:U,onWithdraw:MRwd,onApprove:MRap,onDelete:MRrm,onAttach:MRat}):(0,c.jsx)("div",{className:"table-card",children:(0,c.jsx)("div",{className:"table-scroll",children:(0,c.jsxs)("table",{className:"rq-table",children:[(0,c.jsx)("thead",{children:(0,c.jsxs)("tr",{children:[(0,c.jsx)("th",{style:{width:56},children:"№"}),(0,c.jsx)("th",{children:"Заявка"}),(0,c.jsx)("th",{children:"Дата"}),(0,c.jsx)("th",{children:"Работник"}),(0,c.jsx)("th",{children:"Номинация"}),(0,c.jsx)("th",{children:"Инициатор"}),(0,c.jsx)("th",{style:{width:140},children:"Статус"}),(0,c.jsx)("th",{style:{width:52}})]})}),(0,c.jsxs)("tbody",{children:[d(u).map((S,R)=>{let pe=ts[S.status];return(0,c.jsxs)("tr",{className:"rq-row",onClick:()=>s(S),children:[(0,c.jsx)("td",{className:"num",children:R+1}),(0,c.jsx)("td",{className:"strong mono",children:S.id}),(0,c.jsx)("td",{className:"cell-date",children:S.date}),(0,c.jsx)("td",{className:"strong",children:S.emp}),(0,c.jsx)("td",{style:{color:"var(--ok-text)",fontWeight:600},children:S.nomination}),(0,c.jsx)("td",{className:"dept",children:S.initiator}),(0,c.jsx)("td",{children:(0,c.jsxs)("span",{className:`status ${pe.cls}`,children:[(0,c.jsx)("i",{}),pe.label]})}),(0,c.jsx)("td",{className:"rq-go",children:(0,c.jsx)(cc,{size:15})})]},S.id)}),!d(u).length&&(0,c.jsx)("tr",{children:(0,c.jsx)("td",{className:"empty",colSpan:"8",children:u==="rejected"?"Отклонённых заявок нет.":u==="sent"?"Исполненных заявок нет.":u==="cancelled"?"Отменённых заявок нет.":"Нет заявок."})})]})]})})}),C&&(0,c.jsx)(eg,{emp:C,points:t,onClose:()=>z(null),onSubmit:S=>{MR_createRequest(S).then(()=>{MR_refreshPoints(l),z(null),MR_rerender(e),n("Заявка сформирована. Получатель получит Вашу благодарность по истечении 24 часов. В течение этого времени у Вас есть возможность отозвать заявку для корректировки.")}).catch(er=>{n(MR_errText(er))})}})]})}var Pf=[["Где можно ознакомиться с руководством пользователя модуля \xABПризнание заслуг\xBB?","Полная инструкция расположена в \xABБазе знаний\xBB в верхней части экрана на главной странице Цифрового ядра."],["Кто может участвовать в программе признания заслуг?","В программе участвуют все работники ЦА, ПП и филиалов НБРК."],["Где можно посмотреть описание бейджей?","Описание каждого бейджа указано в закладке \xABО программе\xBB."],["Может ли работник ЦА направить благодарность работнику филиала?","Да, благодарность можно направить любому работнику НБРК с обязательным указанием текста заслуги."],["Сколько бейджей можно направить за квартал?","Количество бейджей зависит от количества доступных баллов в соответствии с должностью."],["На какой период доступны мотивационные баллы?","Руководители и работники Национального Банка, в соответствии со своей должностью, владеют определённым количеством мотивационных баллов на месяц."],["Переходят ли доступные баллы работника на следующий квартал?","Нет, доступные мотивационные баллы не переносятся на следующий отчётный период."],["Что является обязательным условием при направлении признания?","При направлении бейджа предусматривается обязательное информационное сообщение — за какое конкретное достижение направлен бейдж. Это обязательное условие признания заслуг."],["Период определения рейтинга","Рейтинг определяется по итогам первого, второго и третьего кварталов отчётного года (ежеквартальный) и по итогам 11 месяцев отчётного года (ежегодный)."],["Сроки подведения итогов","Итоги подводятся автоматически: ежеквартально — первого числа месяца, следующего за отчётным кварталом; ежегодно — по состоянию на 1 декабря отчётного года (за 11 месяцев календарного года)."],["Как определяются победители и рейтинг?","Победителем определяется работник, набравший максимальное количество мотивационных баллов в отчётном периоде. Рейтинг рассчитывается отдельно среди руководителей и работников."]];function ig(){let[t,l]=(0,N.useState)(null),[a,e]=(0,N.useState)(""),n=(0,N.useMemo)(()=>{let u=a.trim().toLowerCase(),MRp=MR_faqPairs(),i=u?MRp.filter(([f,s])=>(f+" "+s).toLowerCase().includes(u)):MRp;return t&&(i=[...i].sort((f,s)=>t==="asc"?f[0].localeCompare(s[0],"ru"):s[0].localeCompare(f[0],"ru"))),i},[t,a]);return(0,c.jsxs)("div",{className:"table-card",children:[(0,c.jsxs)("div",{className:"faq-tools",children:[(0,c.jsxs)("div",{children:[(0,c.jsx)("h3",{className:"card-title",children:"Частые вопросы по программе"}),(0,c.jsxs)("div",{className:"faq-count",children:[n.length," из ",MR_faqPairs().length]})]}),(0,c.jsxs)("div",{className:"mini-search",children:[(0,c.jsx)(ls,{size:14}),(0,c.jsx)("input",{value:a,onChange:u=>e(u.target.value),placeholder:"Поиск по вопросам и ответам…"})]})]}),(0,c.jsx)("div",{className:"table-scroll",children:(0,c.jsxs)("table",{children:[(0,c.jsx)("thead",{children:(0,c.jsxs)("tr",{children:[(0,c.jsxs)("th",{className:"sortable",style:{width:"34%"},onClick:()=>l(t==="asc"?"desc":"asc"),children:["Вопрос ",(0,c.jsx)("span",{className:"sarr",children:t==="asc"?"▲":t==="desc"?"▼":"⇅"})]}),(0,c.jsx)("th",{children:"Ответ"})]})}),(0,c.jsxs)("tbody",{children:[n.map(([u,i],f)=>(0,c.jsxs)("tr",{children:[(0,c.jsx)("td",{className:"faq-q",children:u}),(0,c.jsx)("td",{className:"faq-a",children:i})]},f)),!n.length&&(0,c.jsx)("tr",{children:(0,c.jsx)("td",{className:"empty",colSpan:"2",children:"Ничего не найдено."})})]})]})})]})}function fg({active:t,setActive:l,theme:a,setTheme:e,collapsed:n,setCollapsed:u,role:MRrole,user:MRu}){let i=ye.icon,[MRop,MRsetOp]=(0,N.useState)({});return(0,c.jsxs)("aside",{className:`sidebar${n?" collapsed":""}`,children:[(0,c.jsxs)("button",{className:"sb-toggle",onClick:()=>u(f=>!f),"aria-expanded":!n,title:n?"Развернуть меню":"Свернуть меню",children:[(0,c.jsx)("span",{className:"sbt-ico",children:(0,c.jsx)(as,{size:15})}),(0,c.jsx)("span",{className:"sbt-lbl",children:n?"Развернуть":"Свернуть"})]}),(0,c.jsxs)("div",{className:"sidebar-head",children:[(0,c.jsx)("div",{className:"logo-mark",children:(0,c.jsx)(Xh,{size:22})}),!n&&(0,c.jsx)(c.Fragment,{children:(0,c.jsxs)("div",{className:"logo-text",children:[(0,c.jsx)("span",{className:"logo-word",children:"ПРИЗНАНИЕ ЗАСЛУГ"}),(0,c.jsx)("span",{className:"logo-badge",children:"v2.4 Enterprise"})]})})]}),(0,c.jsx)("nav",{className:"sidebar-nav noscroll",children:(0,c.jsxs)("div",{className:"navgroup active",children:[null,(0,c.jsx)("div",{className:"subnav",children:MR_nav(MRrole).map(f=>{let s=f.icon;if(f.kids){let ka=f.kids.some(k=>k.key===t),op=MRop[f.key]!==void 0?MRop[f.key]:ka;return(0,c.jsxs)("div",{className:`subgrp${op?" open":""}`,children:[(0,c.jsxs)("button",{className:`sub grp${ka?" sel":""}`,onClick:()=>{n?l(f.kids[0].key):MRsetOp(v=>Object.assign({},v,{[f.key]:!op}))},title:n?f.label:void 0,children:[(0,c.jsx)("span",{className:"dotico",children:(0,c.jsx)(s,{size:13})}),!n&&(0,c.jsx)("span",{className:"slbl",children:f.label}),!n&&(0,c.jsx)("span",{className:"subcar",children:(0,c.jsx)(MR_IcoArrow,{size:14})})]}),op&&!n&&(0,c.jsx)("div",{className:"subkids",children:f.kids.map(k=>(0,c.jsxs)("button",{className:`sub kid${t===k.key?" on":""}`,onClick:()=>l(k.key),children:[(0,c.jsx)("span",{className:"kiddot"}),(0,c.jsx)("span",{className:"slbl",children:k.label})]},k.key))})]},f.key)}return(0,c.jsxs)("button",{className:`sub${t===f.key?" on":""}`,onClick:()=>l(f.key),title:n?f.label:void 0,children:[(0,c.jsx)("span",{className:"dotico",children:(0,c.jsx)(s,{size:13})}),!n&&(0,c.jsx)("span",{className:"slbl",children:f.label})]},f.key)})})]})}),(0,c.jsxs)("div",{className:"sidebar-foot",children:[(0,c.jsxs)("button",{className:"theme-toggle",onClick:()=>e(a==="dark"?"light":"dark"),children:[a==="dark"?(0,c.jsx)(Oh,{size:18}):(0,c.jsx)(Yh,{size:18}),!n&&(0,c.jsx)("span",{children:a==="dark"?"Светлая тема":"Тёмная тема"}),!n&&(0,c.jsx)("span",{className:"switch",children:(0,c.jsx)("i",{})})]}),(0,c.jsxs)("button",{className:"profile",onClick:()=>l("lk"),title:"Личный кабинет",children:[(0,c.jsx)("div",{className:"profile-av",children:(0,c.jsx)(MR_Ava,{u:MRu,size:32})}),!n&&(0,c.jsxs)("div",{className:"profile-meta",children:[(0,c.jsx)("div",{className:"profile-name",children:MRu?MRu.short:""}),(0,c.jsx)("div",{className:"profile-role",children:MRu?MR_roleLabel(MRu.role):""})]}),!n&&(0,c.jsx)(s1,{size:16,style:{color:"var(--faint)",flexShrink:0}})]})]})]})}var _f=["RU","EN","KZ"];var MR_READ={};
 function MR_readKey(u){return u?u.login:"-"}
 function MR_isRead(u,id){var m=MR_READ[MR_readKey(u)];return !!(m&&m[id])}
 function MR_markRead(u,id){var k=MR_readKey(u);(MR_READ[k]=MR_READ[k]||{})[id]=!0}
@@ -2465,6 +2465,11 @@ function MR_reqBase(records) {
   return [].concat(ng, (records || []).map(function (S, R) {
     return {
       id: S.id || ("ЗС-2026-" + String(1201 + R)),
+      /* srvId отличает серверную заявку от локальной: по нему решается,
+         уходит ли смена статуса в API или остаётся в браузере. */
+      srvId: S.srvId || null,
+      docId: S.docId || null,
+      docCount: S.docCount || 0,
       status: S.status || "pending",
       tnumber: S.tnumber || "", emp: S.emp, post: S.post || "Работник НБРК", dept: S.dept,
       initiator: S.initiator || MR_ME_SHORT, date: S.date,
@@ -2814,8 +2819,15 @@ function MR_Req(props) {
             : (0, c.jsxs)("div", { className: "rq-nodoc", children: [(0, c.jsx)($f, { size: 18 }), "Документ не приложен"] }),
           MR_can(role, "attach") && !fin && (0, c.jsxs)("div", {
             className: "mr-attach", children: [
-              (0, c.jsx)("input", { ref: fileRef, type: "file", style: { display: "none" }, onChange: function (e2) { var f2 = e2.target.files && e2.target.files[0]; if (f2 && props.onAttach) props.onAttach(t, f2.name); e2.target.value = ""; } }),
+              (0, c.jsx)("input", { ref: fileRef, type: "file", style: { display: "none" }, onChange: function (e2) { var f2 = e2.target.files && e2.target.files[0]; if (f2 && props.onAttach) props.onAttach(t, f2); e2.target.value = ""; } }),
               (0, c.jsxs)("button", { className: "btn sm", onClick: function () { fileRef.current && fileRef.current.click(); }, children: [(0, c.jsx)($f, { size: 14 }), " Прикрепить вложение"] }),
+              t.doc && t.docId && (0, c.jsx)("button", {
+                className: "btn sm",
+                onClick: function () {
+                  MR_downloadAttachment(t).catch(function (e) { props.toast && props.toast(MR_errText(e)); });
+                },
+                children: "Скачать « " + t.doc + " »"
+              }),
               t.doc && (0, c.jsx)("button", { className: "btn sm", onClick: function () { props.onAttach && props.onAttach(t, null); }, children: "Удалить вложение" })
             ]
           })
@@ -2990,6 +3002,10 @@ function MR_Login(props) {
             return MR_loadRequests().catch(function (e) {
               if (e && e.kind === "forbidden") MR_SRV_REQS = null;
               console.log("Заявки из API не получены — показываем локальные");
+            }).then(function () {
+              /* Уведомления тянем следом: их отсутствие сессию не рвёт,
+                 колокольчик просто останется на локальных событиях. */
+              return MR_loadNotifications();
             });
           })
           .catch(function () {
@@ -3206,14 +3222,45 @@ function MR_Admin(props) {
     toast("Изменения по заявке " + r.id + " сохранены.");
   };
   var move = function (r, status, action, cmt) {
+    /* Серверная заявка — статус меняет сервер, и реестр перечитывается.
+       Локальная (созданная до этапа 3) правится в браузере, как раньше. */
+    if (r.srvId) {
+      MR_changeStatus(r, status, cmt).then(function () {
+        setOpen(null);
+        MR_rerender(props.setOvr);
+        toast("Заявка " + r.id + " — " + action.toLowerCase() + ".");
+      }).catch(function (e) { toast(MR_errText(e)); });
+      return;
+    }
     patch(r, { status: status, note: cmt || r.note || "", history: hist(r, action, cmt) });
     setOpen(null); toast("Заявка " + r.id + " — " + action.toLowerCase() + ".");
   };
-  var attach = function (r, name) {
+  var attach = function (r, file) {
+    /* Серверная заявка: файл уезжает на сервер. Локальная (до этапа 3)
+       по-прежнему помнит только имя — самого файла у неё никогда и не было. */
+    if (r.srvId) {
+      var op = file ? MR_uploadAttachment(r, file) : MR_deleteAttachment(r);
+      op.then(function () {
+        MR_rerender(props.setOvr);
+        toast(file ? "Документ приложен к заявке " + r.id + "." : "Документ удалён.");
+      }).catch(function (e) { toast(MR_errText(e)); });
+      return;
+    }
+    var name = file && file.name ? file.name : file;
     patch(r, { doc: name, history: hist(r, name ? "Приложен документ" : "Документ удалён", name || "") });
     toast(name ? "Документ приложен к заявке " + r.id + "." : "Документ удалён.");
   };
   var remove = function (r) {
+    /* Серверную заявку удаляет сервер: он же вернёт баллы инициатору,
+       если она ещё висела в ожидании. Локальная (до этапа 3) — как раньше. */
+    if (r.srvId) {
+      MR_deleteRequest(r).then(function () {
+        setOpen(null);
+        MR_rerender(props.setOvr);
+        toast("Заявка " + r.id + " удалена администратором.");
+      }).catch(function (e) { toast(MR_errText(e)); });
+      return;
+    }
     props.setDel(function (p) { return p.concat([r.id]); });
     setOpen(null); toast("Заявка " + r.id + " удалена администратором.");
   };
@@ -3456,6 +3503,33 @@ var MR_api = {
 
   /* Выход — дело клиентское: сервер токены не отзывает. */
   logout: function () { MR_token.clear(); },
+
+  /* Загрузка файла. Отдельно от request(): тело здесь FormData, и
+     Content-Type должен проставить сам браузер — вместе с boundary,
+     без которого сервер не разберёт multipart. */
+  upload: function (path, file) {
+    var headers = {};
+    var tok = MR_token.get();
+    if (tok) headers["Authorization"] = "Bearer " + tok;
+    var fd = new FormData();
+    fd.append("file", file, file.name);
+
+    return fetch(MR_API_BASE + path, { method: "POST", headers: headers, body: fd })
+      .then(function (res) {
+        return res.text().then(function (raw) {
+          var data = null;
+          try { data = raw ? JSON.parse(raw) : null; } catch (e) { }
+          if (res.ok) return data;
+          var msg = (data && data.error && data.error.message) || ("Ошибка загрузки: " + res.status);
+          if (res.status === 401) { MR_token.clear(); throw MR_ApiError("auth", msg, 401); }
+          if (res.status === 403) throw MR_ApiError("forbidden", msg, 403);
+          throw MR_ApiError("http", msg, res.status);
+        });
+      }, function () {
+        throw MR_ApiError("network",
+          "Не удалось связаться с сервером " + MR_API_BASE + ". Проверьте, запущен ли backend.", 0);
+      });
+  },
 
   /* Проверка доступности backend. Открыта без токена. */
   health: function () { return MR_api.get("/health"); }
@@ -4536,7 +4610,7 @@ function MR_Rating(props) {
   });
 }
 
-function vg(){let[t,l]=(0,N.useState)("home"),[a,e]=(0,N.useState)("dark"),[n,u]=(0,N.useState)(!1),[i,f]=(0,N.useState)(null),[s,A]=(0,N.useState)(!1),[h,g]=(0,N.useState)(MR_initPoints),[d,r]=(0,N.useState)(()=>MR_boot().records||[]),[MRuser,MRsetUser]=(0,N.useState)(MR_initUser),[MRovr,MRsetOvr]=(0,N.useState)(()=>MR_boot().ovr||{}),[MRdel,MRsetDel]=(0,N.useState)(()=>MR_boot().del||[]),[MRnr,MRsetNr]=(0,N.useState)(0);let MRreqs=MR_SRV_REQS!==null?MR_SRV_REQS.concat(d):d;let MRrole=MRuser?MRuser.role:"initiator",MRlogin=m=>{MR_CUR=m,MRsetUser(m);let P=MR_boot().pts||{};g(P[m.login]!==void 0?P[m.login]:m.points),l("home"),f("Вход выполнен: "+m.short+" — "+MR_roleLabel(m.role)+".")},MRlogout=()=>{MR_api.logout(),MR_CUR=null,MRsetUser(null),l("home")},MRaward=MR_awardOf(MRuser,MRreqs,MRovr,MRdel),MRnotifs=MR_notifsFor(MRuser,MRreqs,MRovr,MRdel),MRread=m=>{MR_markRead(MRuser,m),MRsetNr(v=>v+1)},MRreadAll=()=>{MR_markAllRead(MRuser,MRnotifs),MRsetNr(v=>v+1)},MRopenNotif=m=>{m.go&&MR_nav(MRrole).some(v=>v.key===m.go)&&l(m.go)};(0,N.useEffect)(()=>{let P=MR_boot().pts||{};MRuser&&(P[MRuser.login]=h),MR_persist({records:d,ovr:MRovr,del:MRdel,user:MRuser?MRuser.login:null,pts:P})},[d,MRovr,MRdel,MRuser,h,MRnr,t]),(0,N.useEffect)(()=>{document.documentElement.classList.toggle("dark",a==="dark")},[a]),(0,N.useEffect)(()=>{if(!i)return;let m=setTimeout(()=>f(null),2600);return()=>clearTimeout(m)},[i]);let b=(MR_navAll().find(m=>m.key===t)||{}).label||"",[B,U]=(0,N.useState)(!1);(0,N.useEffect)(()=>{let m=()=>U(window.scrollY>8);return m(),window.addEventListener("scroll",m,{passive:!0}),()=>window.removeEventListener("scroll",m)},[]);if(!MRuser)return(0,c.jsx)(MR_Login,{onLogin:MRlogin});return(0,c.jsxs)("div",{className:"shell",children:[(0,c.jsx)(fg,{active:t,setActive:l,theme:a,setTheme:e,collapsed:n,setCollapsed:u,role:MRrole,user:MRuser}),(0,c.jsxs)("div",{className:"main-col",children:[(0,c.jsxs)("div",{className:`topdock${B?" stuck":""}`,children:[(0,c.jsx)("div",{className:"hero-slot",children:(0,c.jsx)(sg,{onAward:()=>{MRaward?A(!0):f("У Вас пока нет полученных наград.")},onOpenAccount:()=>l("lk"),user:MRuser,onLogout:MRlogout,notifs:MRnotifs,onRead:MRread,onReadAll:MRreadAll,onOpen:MRopenNotif,hasAward:!!MRaward})}),(0,c.jsx)(Ag,{})]}),(0,c.jsxs)("main",{className:"page",children:[(0,c.jsxs)("div",{className:"page-head",children:[(0,c.jsxs)("div",{children:[(0,c.jsx)("div",{className:"crumbs",children:t==="lk"||t==="home"?(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("span",{children:"Цифровое ядро НБРК"}),(0,c.jsx)("span",{children:"/"}),(0,c.jsx)("b",{children:t==="lk"?"Личный кабинет":"Главная"})]}):(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("span",{children:ye.label}),(0,c.jsx)("span",{children:"/"}),MR_navParent(t)?(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("span",{children:MR_navParent(t).label}),(0,c.jsx)("span",{children:"/"})]}):null,(0,c.jsx)("b",{children:b})]})}),(0,c.jsx)("h1",{className:"page-title",children:t==="lk"?"Личный кабинет":t==="zaslugi"?"Выражение благодарности":t==="refs"?"Справочники":b})]}),(0,c.jsxs)("div",{className:"head-actions",children:[t==="zaslugi"&&(0,c.jsxs)("div",{className:"points",children:["Доступные баллы на текущий месяц: ",(0,c.jsx)($h,{value:h})]}),t!=="about"&&t!=="lk"&&t!=="home"&&(0,c.jsxs)("div",{className:"toolbar-actions",children:[(t==="zaslugi"||t==="faq")&&(0,c.jsxs)("button",{className:"btn",onClick:()=>{let R2=t==="faq"?[["Вопрос","Ответ"]].concat(MR_faqPairs()):[["№","Заявка","Дата","Работник","Подразделение","Номинация","Заслуга","Инициатор","Статус"]].concat(MR_buildReqs(MRreqs,MRovr,MRdel).map((v,k)=>[k+1,v.id,v.date,v.emp,v.dept,v.nomination,v.merit,v.initiator,(ts[v.status]||{}).label||v.status]));f(MR_exportXlsx(R2,t==="faq"?"Вопрос-ответ.xlsx":"Признание_заслуг_заявки.xlsx")?"Данные выгружены в файл .xlsx.":"Не удалось сформировать файл .xlsx.")},children:[(0,c.jsx)(Qh,{size:14}),(0,c.jsx)("span",{className:"lbl",children:"Экспорт .xlsx"})]})]})]})]}),t==="lk"&&(0,c.jsx)(Fh,{points:h,user:MRuser,records:MRreqs,ovr:MRovr,del:MRdel}),t==="home"&&(0,c.jsx)(MR_Home,{onGo:l,toast:f,records:MRreqs,ovr:MRovr,del:MRdel}),t==="about"&&(0,c.jsx)(Jh,{}),t==="zaslugi"&&(0,c.jsx)(cg,{points:h,setPoints:g,records:MRreqs,setRecords:r,toast:f,ovr:MRovr,setOvr:MRsetOvr,del:MRdel,setDel:MRsetDel,role:MRrole}),t==="faq"&&(0,c.jsx)(ig,{}),t==="rating"&&(0,c.jsx)(MR_Rating,{records:MRreqs,ovr:MRovr,del:MRdel,toast:f}),t==="refs"&&(0,c.jsx)(MR_Refs,{role:MRrole,toast:f}),t==="admin"&&(0,c.jsx)(MR_Admin,{role:MRrole,records:MRreqs,ovr:MRovr,setOvr:MRsetOvr,del:MRdel,setDel:MRsetDel,toast:f}),(0,c.jsx)("footer",{className:"foot",children:"Дизайн v2.4 \xB7 SOC2 Type II Сертификация \xB7 Обработка данных \xB7 \xA9 2026 Абдужабарова Мадина."})]})]}),s&&MRaward&&(0,c.jsx)(_h,{onClose:()=>A(!1),grant:MRaward}),i&&(0,c.jsxs)("div",{className:"toast anim-fade",children:[(0,c.jsx)(es,{size:16}),i]})]})}function MR_isMe(fio){return !!(MR_CUR&&fio===MR_CUR.fio)}
+function vg(){let[t,l]=(0,N.useState)("home"),[a,e]=(0,N.useState)("dark"),[n,u]=(0,N.useState)(!1),[i,f]=(0,N.useState)(null),[s,A]=(0,N.useState)(!1),[h,g]=(0,N.useState)(MR_initPoints),[d,r]=(0,N.useState)(()=>MR_boot().records||[]),[MRuser,MRsetUser]=(0,N.useState)(MR_initUser),[MRovr,MRsetOvr]=(0,N.useState)(()=>MR_boot().ovr||{}),[MRdel,MRsetDel]=(0,N.useState)(()=>MR_boot().del||[]),[MRnr,MRsetNr]=(0,N.useState)(0);let MRreqs=MR_SRV_REQS!==null?MR_SRV_REQS.concat(d):d;let MRrole=MRuser?MRuser.role:"initiator",MRlogin=m=>{MR_CUR=m,MRsetUser(m);g(typeof m.points==="number"?m.points:0),l("home"),f("Вход выполнен: "+m.short+" — "+MR_roleLabel(m.role)+".")},MRlogout=()=>{MR_api.logout(),MR_CUR=null,MRsetUser(null),l("home")},MRaward=MR_awardOf(MRuser,MRreqs,MRovr,MRdel),MRnotifs=MR_SRV_NOTIFS.concat(MR_notifsFor(MRuser,MRreqs,MRovr,MRdel)),MRread=m=>{MR_readNotif(MRuser,m),MRsetNr(v=>v+1)},MRreadAll=()=>{MR_readAllNotifs(MRuser,MRnotifs),MRsetNr(v=>v+1)},MRopenNotif=m=>{m.go&&MR_nav(MRrole).some(v=>v.key===m.go)&&l(m.go)};(0,N.useEffect)(()=>{let P=MR_boot().pts||{};MRuser&&(P[MRuser.login]=h),MR_persist({records:d,ovr:MRovr,del:MRdel,user:MRuser?MRuser.login:null,pts:P})},[d,MRovr,MRdel,MRuser,h,MRnr,t]),(0,N.useEffect)(()=>{document.documentElement.classList.toggle("dark",a==="dark")},[a]),(0,N.useEffect)(()=>{if(!i)return;let m=setTimeout(()=>f(null),2600);return()=>clearTimeout(m)},[i]);let b=(MR_navAll().find(m=>m.key===t)||{}).label||"",[B,U]=(0,N.useState)(!1);(0,N.useEffect)(()=>{let m=()=>U(window.scrollY>8);return m(),window.addEventListener("scroll",m,{passive:!0}),()=>window.removeEventListener("scroll",m)},[]);if(!MRuser)return(0,c.jsx)(MR_Login,{onLogin:MRlogin});return(0,c.jsxs)("div",{className:"shell",children:[(0,c.jsx)(fg,{active:t,setActive:l,theme:a,setTheme:e,collapsed:n,setCollapsed:u,role:MRrole,user:MRuser}),(0,c.jsxs)("div",{className:"main-col",children:[(0,c.jsxs)("div",{className:`topdock${B?" stuck":""}`,children:[(0,c.jsx)("div",{className:"hero-slot",children:(0,c.jsx)(sg,{onAward:()=>{MRaward?A(!0):f("У Вас пока нет полученных наград.")},onOpenAccount:()=>l("lk"),user:MRuser,onLogout:MRlogout,notifs:MRnotifs,onRead:MRread,onReadAll:MRreadAll,onOpen:MRopenNotif,hasAward:!!MRaward})}),(0,c.jsx)(Ag,{})]}),(0,c.jsxs)("main",{className:"page",children:[(0,c.jsxs)("div",{className:"page-head",children:[(0,c.jsxs)("div",{children:[(0,c.jsx)("div",{className:"crumbs",children:t==="lk"||t==="home"?(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("span",{children:"Цифровое ядро НБРК"}),(0,c.jsx)("span",{children:"/"}),(0,c.jsx)("b",{children:t==="lk"?"Личный кабинет":"Главная"})]}):(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("span",{children:ye.label}),(0,c.jsx)("span",{children:"/"}),MR_navParent(t)?(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)("span",{children:MR_navParent(t).label}),(0,c.jsx)("span",{children:"/"})]}):null,(0,c.jsx)("b",{children:b})]})}),(0,c.jsx)("h1",{className:"page-title",children:t==="lk"?"Личный кабинет":t==="zaslugi"?"Выражение благодарности":t==="refs"?"Справочники":b})]}),(0,c.jsxs)("div",{className:"head-actions",children:[t==="zaslugi"&&(0,c.jsxs)("div",{className:"points",children:["Доступные баллы на текущий месяц: ",(0,c.jsx)($h,{value:h})]}),t!=="about"&&t!=="lk"&&t!=="home"&&(0,c.jsxs)("div",{className:"toolbar-actions",children:[(t==="zaslugi"||t==="faq")&&(0,c.jsxs)("button",{className:"btn",onClick:()=>{let R2=t==="faq"?[["Вопрос","Ответ"]].concat(MR_faqPairs()):[["№","Заявка","Дата","Работник","Подразделение","Номинация","Заслуга","Инициатор","Статус"]].concat(MR_buildReqs(MRreqs,MRovr,MRdel).map((v,k)=>[k+1,v.id,v.date,v.emp,v.dept,v.nomination,v.merit,v.initiator,(ts[v.status]||{}).label||v.status]));f(MR_exportXlsx(R2,t==="faq"?"Вопрос-ответ.xlsx":"Признание_заслуг_заявки.xlsx")?"Данные выгружены в файл .xlsx.":"Не удалось сформировать файл .xlsx.")},children:[(0,c.jsx)(Qh,{size:14}),(0,c.jsx)("span",{className:"lbl",children:"Экспорт .xlsx"})]})]})]})]}),t==="lk"&&(0,c.jsx)(Fh,{points:h,user:MRuser,records:MRreqs,ovr:MRovr,del:MRdel}),t==="home"&&(0,c.jsx)(MR_Home,{onGo:l,toast:f,records:MRreqs,ovr:MRovr,del:MRdel}),t==="about"&&(0,c.jsx)(Jh,{}),t==="zaslugi"&&(0,c.jsx)(cg,{points:h,setPoints:g,records:MRreqs,setRecords:r,toast:f,ovr:MRovr,setOvr:MRsetOvr,del:MRdel,setDel:MRsetDel,role:MRrole}),t==="faq"&&(0,c.jsx)(ig,{}),t==="rating"&&(0,c.jsx)(MR_Rating,{records:MRreqs,ovr:MRovr,del:MRdel,toast:f}),t==="refs"&&(0,c.jsx)(MR_Refs,{role:MRrole,toast:f}),t==="admin"&&(0,c.jsx)(MR_Admin,{role:MRrole,records:MRreqs,ovr:MRovr,setOvr:MRsetOvr,del:MRdel,setDel:MRsetDel,toast:f}),(0,c.jsx)("footer",{className:"foot",children:"Дизайн v2.4 \xB7 SOC2 Type II Сертификация \xB7 Обработка данных \xB7 \xA9 2026 Абдужабарова Мадина."})]})]}),s&&MRaward&&(0,c.jsx)(_h,{onClose:()=>A(!1),grant:MRaward}),i&&(0,c.jsxs)("div",{className:"toast anim-fade",children:[(0,c.jsx)(es,{size:16}),i]})]})}function MR_isMe(fio){return !!(MR_CUR&&fio===MR_CUR.fio)}
 function MR_applyDir(j){
 if(!j||typeof j!=="object")throw new Error("bad json");
 var P=j.people,U=j.users;
@@ -4666,14 +4740,199 @@ function MR_apiRequestsToRecords(items) {
       dept: r.employee_dept || "",
       initiator: r.initiator_login || "",
       date: MR_apiDate(r.created_at),
-      comment: r.merit_text || r.comment || "",
+      comment: r.comment || r.merit_text || "",
       merit: r.merit_text || "",
       nomination: r.nomination || "",
       badge: r.nomination || "",
-      doc: r.doc_name || null,
+      /* Вложение теперь отдельная запись: имя показываем, id нужен для
+         скачивания и удаления. doc_name остался для старых заявок. */
+      doc: r.attachment_name || r.doc_name || null,
+      docId: r.attachment_id || null,
+      docCount: r.attachments_count || 0,
       cost: r.points || 0
     };
   });
+}
+
+/* ---------- запись заявок на сервер (этап 3) ----------
+
+   До этого шага заявка жила только в браузере: коллега её не видел, а
+   модератор не мог согласовать то, что до него не дошло. Теперь создание
+   и смена статуса уходят в API, а реестр перечитывается с сервера.
+
+   Заявки, созданные раньше в localStorage, остаются локальными: у них нет
+   srvId, и работают они по-старому — старые записи не теряются. */
+
+/* UI-статус прототипа -> код статуса в базе. Источник один — таблица ts,
+   второй копии соответствий заводить не нужно. */
+function MR_srvStatus(uiKey) {
+  var m = ts[uiKey];
+  return m ? m.code : null;
+}
+
+/* Код номинации (NOM-101) по её названию: его понимает API.
+   Название тоже принимается сервером — код надёжнее при переименовании. */
+function MR_nomCode(nom) {
+  var n = MR_Store.nominations.find(function (v) { return v.nomination === nom; });
+  return n ? n.code : null;
+}
+
+/* Текст ошибки для человека. Сетевую беду, протухшую сессию и нехватку
+   прав различаем: советы в этих случаях разные. */
+function MR_errText(e) {
+  if (!e) return "Не удалось выполнить операцию.";
+  if (e.kind === "network") return "Сервер недоступен — изменения не сохранены. Проверьте, запущен ли backend.";
+  if (e.kind === "auth") return "Сессия истекла. Войдите в Систему заново.";
+  if (e.kind === "forbidden") return e.message || "Недостаточно прав для этого действия.";
+  return e.message || "Не удалось выполнить операцию.";
+}
+
+/* Перерисовка после ответа сервера. MR_SRV_REQS — обычная переменная, сама
+   по себе React не будит; подменяем состояние на копию той же длины. */
+function MR_rerender(setState) {
+  if (typeof setState !== "function") return;
+  setState(function (prev) {
+    return Array.isArray(prev) ? prev.slice() : Object.assign({}, prev);
+  });
+}
+
+/* Создание заявки. Номер присваивает сервер: request_no в базе уникален,
+   и генерировать его на двух клиентах сразу — значит рано или поздно
+   столкнуться. Промис завершается, когда реестр уже перечитан. */
+function MR_createRequest(rec) {
+  return MR_api.post("/requests", {
+    tnumber: rec.tnumber || "",
+    nomination_code: MR_nomCode(rec.nomination),
+    nomination: rec.nomination || "",
+    merit_text: rec.merit || "",
+    comment: rec.comment || ""
+  }).then(function () { return MR_loadRequests(); });
+}
+
+/* ---------- вложения (этап 5) ----------
+
+   Раньше «прикрепить вложение» сохраняло только имя файла: сам файл никуда
+   не уходил и открыть его было нельзя. Теперь файл уезжает на сервер, а в
+   заявке остаётся ссылка на него. */
+
+function MR_uploadAttachment(rec, file) {
+  return MR_api.upload("/requests/" + rec.srvId + "/attachments", file)
+    .then(function () { return MR_loadRequests(); });
+}
+
+function MR_deleteAttachment(rec) {
+  if (!rec.docId) return Promise.reject(MR_ApiError("http", "У заявки нет вложения", 0));
+  return MR_api.del("/attachments/" + rec.docId).then(function () { return MR_loadRequests(); });
+}
+
+/* Скачивание. Обычной ссылкой обойтись нельзя: маршрут закрыт токеном,
+   а <a href> заголовок Authorization не отправит. Забираем файл запросом
+   и отдаём браузеру как временную ссылку. */
+function MR_downloadAttachment(rec) {
+  return fetch(MR_API_BASE + "/attachments/" + rec.docId + "/download", {
+    headers: { Authorization: "Bearer " + MR_token.get() }
+  }).then(function (res) {
+    if (!res.ok) throw MR_ApiError("http", "Не удалось скачать вложение: " + res.status, res.status);
+    return res.blob();
+  }).then(function (blob) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = rec.doc || "вложение";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 30000);
+  });
+}
+
+/* ---------- уведомления с сервера (этап 5) ----------
+
+   Колокольчик собирал уведомления из истории заявки. У заявок с сервера
+   история в реестр не приходит, поэтому события чужих действий до человека
+   не доходили. Теперь их присылает сервер — он же помнит, что прочитано.
+
+   Локальные уведомления по старым записям остаются: они считаются из
+   localStorage и с серверными просто складываются. */
+var MR_SRV_NOTIFS = [];
+
+var MR_NOTIF_KIND = {
+  request_created:   { type: "ok",       go: "admin"   },
+  thanks_received:   { type: "award",    go: "rating"  },
+  request_approved:  { type: "ok",       go: "zaslugi" },
+  request_rejected:  { type: "revision", go: "zaslugi" },
+  request_withdrawn: { type: "revision", go: "admin"   }
+};
+
+function MR_notifsFromApi(items) {
+  return (items || []).map(function (r) {
+    var kind = MR_NOTIF_KIND[r.type] || { type: "ok", go: "zaslugi" };
+    return {
+      id: "srv#" + r.id,
+      srvId: r.id,
+      type: kind.type,
+      go: kind.go,
+      title: r.title,
+      text: r.text || "",
+      time: MR_apiDate(r.created_at),
+      unread: !r.is_read
+    };
+  });
+}
+
+function MR_loadNotifications() {
+  return MR_api.get("/notifications?limit=100").then(function (res) {
+    MR_SRV_NOTIFS = MR_notifsFromApi(res && res.items);
+    return MR_SRV_NOTIFS.length;
+  }).catch(function () {
+    MR_SRV_NOTIFS = [];   /* нет связи — показываем только локальные */
+    return 0;
+  });
+}
+
+/* Отметка о прочтении. Серверное уведомление помечает сервер, локальное —
+   прежний механизм в localStorage. */
+function MR_readNotif(user, note) {
+  if (note && note.srvId) {
+    var found = MR_SRV_NOTIFS.find(function (v) { return v.srvId === note.srvId; });
+    if (found) found.unread = false;      /* сразу, не дожидаясь ответа */
+    return MR_api.patch("/notifications/" + note.srvId + "/read", {}).catch(function () { });
+  }
+  MR_markRead(user, note && note.id);
+  return Promise.resolve();
+}
+
+function MR_readAllNotifs(user, list) {
+  MR_SRV_NOTIFS.forEach(function (v) { v.unread = false; });
+  MR_markAllRead(user, (list || []).filter(function (v) { return !v.srvId; }));
+  return MR_api.post("/notifications/read-all", {}).catch(function () { });
+}
+
+/* Баланс баллов. Считать его в браузере больше нельзя: сервер списывает
+   баллы при подаче и возвращает при отзыве и отклонении, в том числе по
+   заявкам, отклонённым уже после того, как эта страница открылась.
+   Спрашиваем настоящее значение вместо того, чтобы вычитать вслепую. */
+function MR_refreshPoints(setPoints) {
+  if (typeof setPoints !== "function") return Promise.resolve(null);
+  return MR_api.me().then(function (r) {
+    var p = r && r.user ? r.user.pointsBalance : null;
+    if (typeof p === "number") setPoints(p);
+    return p;
+  }).catch(function () { return null; });   /* баланс не критичен: молчим */
+}
+
+/* Удаление серверной заявки. Право remove есть только у администратора —
+   остальным сервер ответит 403, и текст отказа покажем как есть. */
+function MR_deleteRequest(rec) {
+  return MR_api.del("/requests/" + rec.srvId).then(function () { return MR_loadRequests(); });
+}
+
+/* Смена статуса серверной заявки. Отзыв идёт отдельным маршрутом: у
+   инициатора право withdraw, у модератора — moderate, и это разные вещи. */
+function MR_changeStatus(rec, uiKey, comment) {
+  var code = MR_srvStatus(uiKey);
+  if (!code) return Promise.reject(MR_ApiError("http", "Неизвестный статус: " + uiKey, 0));
+  var call = code === "CANCEL"
+    ? MR_api.post("/requests/" + rec.srvId + "/withdraw", { comment: comment || "" })
+    : MR_api.patch("/requests/" + rec.srvId, { status: code, comment: comment || "" });
+  return call.then(function () { return MR_loadRequests(); });
 }
 
 /* Читает реестр с сервера. Ошибку наружу не гасит: вызывающий решает,
@@ -4683,7 +4942,12 @@ function MR_loadRequests() {
     MR_SRV_REQS = MR_apiRequestsToRecords(items);
     MR_VER++;
     console.log("Реестр заявок из API: " + MR_SRV_REQS.length);
-    return MR_SRV_REQS.length;
+    /* Любое действие с заявкой рождает уведомления — и себе, и другим.
+       Перечитываем их тем же заходом, чтобы колокольчик не отставал.
+       Ошибку глушим: реестр важнее, и он уже получен. */
+    return MR_loadNotifications().catch(function () { }).then(function () {
+      return MR_SRV_REQS.length;
+    });
   });
 }
 

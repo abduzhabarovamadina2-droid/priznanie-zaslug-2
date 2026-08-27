@@ -15,7 +15,10 @@
     "db:seed": "node seeds/seed-employees.js",
     "db:seed:users": "node seeds/seed-users.js",
     "db:seed:ratings": "node seeds/seed-ratings.js",
-    "db:seed:all": "npm run db:seed && npm run db:seed:users && npm run db:seed:ratings"
+    "db:seed:all": "npm run db:seed && npm run db:seed:users && npm run db:seed:ratings && npm run db:seed:merits",
+    "db:seed:merits": "node seeds/seed-merits.js",
+    "db:rank": "node scripts/recompute-ranks.js",
+    "test": "node --test --test-concurrency=1 \"tests/*.test.js\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -25,9 +28,10 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "multer": "^2.2.0",
+    "nodemailer": "^9.0.5",
     "pg": "^8.12.0"
   },
-  "devDependencies": {},
   "keywords": [],
   "author": "",
   "license": "ISC",

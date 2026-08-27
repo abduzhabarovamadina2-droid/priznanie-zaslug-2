@@ -18,6 +18,16 @@ exports.create = asyncHandler(async (req, res) => {
 });
 
 exports.patch = asyncHandler(async (req, res) => {
-  const data = await service.changeStatus(req.params.id, req.body || {});
+  const data = await service.changeStatus(req.params.id, req.body || {}, req.user);
   res.json({ ok: true, item: data });
+});
+
+exports.withdraw = asyncHandler(async (req, res) => {
+  const data = await service.withdraw(req.params.id, req.body || {}, req.user);
+  res.json({ ok: true, item: data });
+});
+
+exports.remove = asyncHandler(async (req, res) => {
+  const data = await service.remove(req.params.id, req.user);
+  res.json({ ok: true, removed: data });
 });
