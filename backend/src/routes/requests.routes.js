@@ -22,6 +22,10 @@ router.patch('/:id', requireAuth, requirePermission('moderate'), c.patch);
 // Владельца заявки проверяет сервис.
 router.post('/:id/withdraw', requireAuth, requirePermission('withdraw'), c.withdraw);
 
+// Повторная отправка заявки после доработки. Право create — это работа
+// инициатора над своей заявкой, а не модерация.
+router.post('/:id/resubmit', requireAuth, requirePermission('create'), c.resubmit);
+
 // Удаление заявки. Право remove есть только у администратора.
 router.delete('/:id', requireAuth, requirePermission('remove'), c.remove);
 

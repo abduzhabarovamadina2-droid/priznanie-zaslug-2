@@ -1,0 +1,99 @@
+name: Проверка кода
+
+# Гоняем на каждый push и на каждый pull request: без этого сломанный код
+# может попасть в main незамеченным — тесты запускались только вручную.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  tests:
+    name: Тесты API
+    runs-on: ubuntu-latest
+
+    # PostgreSQL поднимаем рядом с задачей: тесты работают с настоящей базой,
+    # а не с заглушками — половина проверок как раз про транзакции,
+    # уникальность и откат, и на моках они ничего не докажут.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: priznanie_zaslug_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/priznanie_zaslug_test
+      JWT_SECRET: ci-секрет-только-для-проверки-не-для-стенда
+      NODE_ENV: test
+      # Почту в CI не шлём: без MAIL_HOST очередь работает в режиме журнала.
+      MAIL_SCHEDULER: '0'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Установка зависимостей
+        working-directory: backend
+        run: npm ci
+
+      - name: Схема базы
+        working-directory: backend
+        run: npm run db:migrate
+
+      - name: Наполнение справочников
+        working-directory: backend
+        run: npm run db:seed:all
+
+      - name: Места в рейтинге и подразделения
+        working-directory: backend
+        run: |
+          npm run db:rank
+          npm run db:departments
+
+      - name: Тесты
+        working-directory: backend
+        run: npm test
+
+  syntax:
+    name: Синтаксис прототипа
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Прототип — один HTML-файл со встроенным скриптом, сборки у него нет.
+      # Опечатка в нём не всплывёт нигде, кроме браузера пользователя,
+      # поэтому разбираем скрипт отдельным шагом.
+      - name: Разбор встроенного скрипта
+        run: |
+          node -e "
+            const fs = require('fs');
+            const src = fs.readFileSync('frontend/Признание заслуг.html', 'utf8');
+            const re = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
+            let m, checked = 0;
+            while ((m = re.exec(src))) {
+              if (/\bsrc\s*=/.test(m[1] || '')) continue;
+              if (!m[2].trim()) continue;
+              new Function(m[2]);
+              checked++;
+            }
+            if (!checked) throw new Error('во фронтенде не найдено ни одного скрипта — проверьте путь');
+            console.log('Разобрано скриптов: ' + checked);
+          "

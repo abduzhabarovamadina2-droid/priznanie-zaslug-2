@@ -3,12 +3,12 @@ const service = require('../services/requests.service');
 const asyncHandler = require('../middleware/asyncHandler');
 
 exports.list = asyncHandler(async (req, res) => {
-  const data = await service.list(req.query);
+  const data = await service.list(req.query, req.user);
   res.json({ ok: true, ...data });
 });
 
 exports.getOne = asyncHandler(async (req, res) => {
-  const data = await service.getOne(req.params.id);
+  const data = await service.getOne(req.params.id, req.user);
   res.json({ ok: true, item: data });
 });
 
@@ -24,6 +24,11 @@ exports.patch = asyncHandler(async (req, res) => {
 
 exports.withdraw = asyncHandler(async (req, res) => {
   const data = await service.withdraw(req.params.id, req.body || {}, req.user);
+  res.json({ ok: true, item: data });
+});
+
+exports.resubmit = asyncHandler(async (req, res) => {
+  const data = await service.resubmit(req.params.id, req.body || {}, req.user);
   res.json({ ok: true, item: data });
 });
 

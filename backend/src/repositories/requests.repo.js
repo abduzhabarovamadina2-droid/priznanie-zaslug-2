@@ -22,7 +22,7 @@ const SELECT = `
          e.post AS employee_post, e.dept AS employee_dept,
          rq.initiator_user_id, u.login AS initiator_login,
          rq.nomination_id, n.name_ru AS nomination, n.points AS nomination_points,
-         rq.merit_id, rq.merit_text, rq.comment, rq.note, rq.doc_name,
+         rq.merit_id, rq.merit_text, rq.comment, rq.note, rq.doc_name, rq.revision_note,
          rq.status_id, s.code AS status_code, s.ui_key AS status_ui_key, s.name AS status_name,
          rq.points, rq.created_at, rq.updated_at,
          -- Вложения показываются прямо в реестре, поэтому берём их здесь,
@@ -36,11 +36,28 @@ const SELECT = `
     LEFT JOIN users u  ON u.id = rq.initiator_user_id
     LEFT JOIN nominations n ON n.id = rq.nomination_id`;
 
-async function findAll({ status = '', employee = '', limit = 100, offset = 0 } = {}) {
+/**
+ * Заявки с учётом области видимости.
+ *
+ * scopeDepartmentId — показывать только заявки на сотрудников этого
+ * подразделения и всех вложенных. Рекурсивный обход дерева: у руководителя
+ * департамента в области видимости все его управления и отделы.
+ */
+async function findAll({ status = '', employee = '', scopeDepartmentId = null, limit = 100, offset = 0 } = {}) {
   const params = [];
   const where = [];
   if (status)   { params.push(status);   where.push(`s.code = $${params.length}`); }
   if (employee) { params.push(employee); where.push(`e.tnumber = $${params.length}`); }
+  if (scopeDepartmentId) {
+    params.push(scopeDepartmentId);
+    where.push(`e.department_id IN (
+      WITH RECURSIVE subtree AS (
+        -- Тип параметра внутри рекурсивного запроса Postgres сам не выводит.
+        SELECT id FROM departments WHERE id = $${params.length}::int
+        UNION ALL
+        SELECT d.id FROM departments d JOIN subtree t ON d.parent_id = t.id
+      ) SELECT id FROM subtree)`);
+  }
   params.push(limit, offset);
   const { rows } = await query(
     `${SELECT} ${where.length ? 'WHERE ' + where.join(' AND ') : ''}
@@ -158,14 +175,22 @@ async function create(data) {
  * исполнение — вместе со сменой статуса, чтобы баллы не вернулись дважды,
  * если запрос оборвётся посередине.
  */
-async function updateStatus(id, newStatusId, { performedBy = null, performedByName = null, action, comment = '', refund = false }) {
+async function updateStatus(id, newStatusId, { performedBy = null, performedByName = null, action, comment = '', refund = false, revisionNote = undefined }) {
   return withTransaction(async (client) => {
     const cur = await client.query(
       'SELECT status_id, points, initiator_user_id FROM requests WHERE id = $1 FOR UPDATE', [id]);
     if (!cur.rows[0]) return null;
     const { status_id: oldStatusId, points, initiator_user_id: initiator } = cur.rows[0];
 
-    await client.query('UPDATE requests SET status_id = $1, updated_at = now() WHERE id = $2', [newStatusId, id]);
+    // undefined — примечание не трогаем; null — очищаем (заявку отправили заново).
+    if (revisionNote === undefined) {
+      await client.query('UPDATE requests SET status_id = $1, updated_at = now() WHERE id = $2',
+        [newStatusId, id]);
+    } else {
+      await client.query(
+        'UPDATE requests SET status_id = $1, revision_note = $2, updated_at = now() WHERE id = $3',
+        [newStatusId, revisionNote, id]);
+    }
     await client.query(
       `INSERT INTO request_history (request_id, action, old_status_id, new_status_id, performed_by, performed_by_name, comment)
        VALUES ($1,$2,$3,$4,$5,$6,$7)`,
@@ -203,4 +228,29 @@ async function remove(id, { refund = false } = {}) {
   });
 }
 
-module.exports = { findAll, findById, findHistory, findNomination, statusIdByCode, create, updateStatus, remove, RuleError };
+/** Попадает ли заявка в область видимости подразделения. */
+async function isInScope(requestId, scopeDepartmentId) {
+  if (!scopeDepartmentId) return true;
+  const { rows } = await query(
+    `SELECT 1 FROM requests rq
+       JOIN employees e ON e.id = rq.employee_id
+      WHERE rq.id = $1 AND e.department_id IN (
+        WITH RECURSIVE subtree AS (
+          SELECT id FROM departments WHERE id = $2::int
+          UNION ALL
+          SELECT d.id FROM departments d JOIN subtree t ON d.parent_id = t.id
+        ) SELECT id FROM subtree)
+      LIMIT 1`, [requestId, scopeDepartmentId]);
+  return rows.length > 0;
+}
+
+/** Подразделение сотрудника, к которому привязана учётная запись. */
+async function departmentOfUser(userId) {
+  const { rows } = await query(
+    `SELECT e.department_id FROM users u
+       JOIN employees e ON e.id = u.employee_id
+      WHERE u.id = $1`, [userId]);
+  return rows[0] ? rows[0].department_id : null;
+}
+
+module.exports = { findAll, findById, findHistory, findNomination, departmentOfUser, isInScope, statusIdByCode, create, updateStatus, remove, RuleError };

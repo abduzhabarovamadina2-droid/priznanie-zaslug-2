@@ -16,7 +16,12 @@ const logger = require('../utils/logger');
  * только инициатор своей заявки, остальные переходы — модерация.
  */
 const TRANSITIONS = {
-  WAIT: ['DONE', 'REJECTED', 'REJECTED_ADMIN', 'CANCEL'],
+  // Из ожидания модератор либо согласует, либо отклоняет, либо возвращает
+  // на доработку; инициатор может отозвать.
+  WAIT: ['DONE', 'REJECTED', 'REJECTED_ADMIN', 'CANCEL', 'REVISION'],
+  // С доработки инициатор возвращает заявку в ожидание или отзывает её.
+  // Модератор может и отсюда отклонить: заявку могли бросить на доработке.
+  REVISION: ['WAIT', 'CANCEL', 'REJECTED', 'REJECTED_ADMIN'],
   DONE: [],
   CANCEL: [],
   REJECTED: ['REJECTED_ADMIN'],
@@ -29,32 +34,85 @@ const PERMISSION_BY_STATUS = {
   DONE: 'moderate',
   REJECTED: 'moderate',
   REJECTED_ADMIN: 'moderate',
+  REVISION: 'moderate',
   CANCEL: 'withdraw',
+  // Возврат с доработки в ожидание делает сам инициатор — это часть
+  // работы над своей заявкой, а не модерация.
+  WAIT: 'create',
 };
 
 /* Переходы, при которых баллы возвращаются инициатору: благодарность не
-   состоялась. Возврат делается только из WAIT — на этом статусе баллы ещё
-   «висят». Переход REJECTED → REJECTED_ADMIN разрешён правилами, и без
-   этой оговорки он вернул бы баллы второй раз. */
+   состоялась. Возврат делается только из статусов, где баллы ещё «висят»
+   (WAIT и REVISION). Переход REJECTED → REJECTED_ADMIN разрешён правилами,
+   и без этой оговорки он вернул бы баллы второй раз.
+
+   На доработку баллы не возвращаются: заявка не закрыта, человек её
+   доработает и отправит снова — списывать второй раз было бы нечестно. */
 const REFUNDING = ['CANCEL', 'REJECTED', 'REJECTED_ADMIN'];
+
+/* Статусы, на которых баллы за заявку ещё удерживаются. */
+const HOLDING = ['WAIT', 'REVISION'];
 
 const ACTION_BY_STATUS = {
   DONE: 'Согласовано',
   REJECTED: 'Отклонено',
   REJECTED_ADMIN: 'Отклонено администратором',
+  REVISION: 'Направлено на доработку',
   CANCEL: 'Отменено инициатором',
+  WAIT: 'Отправлено повторно',
 };
 
-async function list(params) {
-  const limit = Math.min(Number(params.limit) || 100, 500);
-  const offset = Math.max(Number(params.offset) || 0, 0);
-  const items = await repo.findAll({ status: params.status || '', employee: params.employee || '', limit, offset });
-  return { items, limit, offset };
+/**
+ * Область видимости заявок.
+ *
+ * Руководитель отвечает за своё подразделение, а не за весь банк — значит
+ * и заявки видит только по нему и вложенным подразделениям. Раньше он
+ * получал весь реестр целиком.
+ *
+ * Модератор, администратор и инициатор видят реестр полностью: первым двум
+ * это нужно по роли, а инициатор и так видит только то, что уже согласовано
+ * или подано им самим.
+ *
+ * Если руководитель не привязан к сотруднику, подразделения у него нет —
+ * тогда он не видит ничего, кроме собственных заявок. Это осознанно:
+ * молча показать всё было бы хуже.
+ */
+async function scopeFor(user) {
+  if (!user || user.role !== 'head') return { scopeDepartmentId: null, scoped: false };
+  const departmentId = await repo.departmentOfUser(user.id);
+  return { scopeDepartmentId: departmentId || -1, scoped: true, departmentId };
 }
 
-async function getOne(id) {
+async function list(params, user) {
+  const limit = Math.min(Number(params.limit) || 100, 500);
+  const offset = Math.max(Number(params.offset) || 0, 0);
+  const scope = await scopeFor(user);
+
+  const items = await repo.findAll({
+    status: params.status || '',
+    employee: params.employee || '',
+    scopeDepartmentId: scope.scopeDepartmentId,
+    limit,
+    offset,
+  });
+  return { items, limit, offset, scoped: scope.scoped };
+}
+
+async function getOne(id, user) {
   const row = await repo.findById(id);
   if (!row) throw AppError.notFound('Заявка');
+
+  // Область видимости действует и на карточку: иначе руководитель, не
+  // видящий заявку в списке, всё равно открыл бы её по прямой ссылке.
+  if (user) {
+    const scope = await scopeFor(user);
+    // Отвечаем как на несуществующую: по разнице ответов нельзя было бы
+    // выяснить, что заявка есть, просто она из чужого подразделения.
+    if (scope.scoped && !(await repo.isInScope(row.id, scope.scopeDepartmentId))) {
+      throw AppError.notFound('Заявка');
+    }
+  }
+
   row.history = await repo.findHistory(id);
   return row;
 }
@@ -168,6 +226,17 @@ async function changeStatus(id, payload, user) {
     throw new AppError('Отозвать можно только собственную заявку', 403);
   }
 
+  // Отправить доработанную заявку заново может только её инициатор.
+  if (next === 'WAIT' && user && user.role !== 'admin'
+      && current.initiator_user_id !== user.id) {
+    throw new AppError('Отправить заявку повторно может только её инициатор', 403);
+  }
+
+  // Возврат без объяснения бесполезен: инициатор не узнает, что править.
+  if (next === 'REVISION' && !String(payload.comment || '').trim()) {
+    throw AppError.badRequest('Укажите, что нужно исправить: примечание обязательно при возврате на доработку');
+  }
+
   const newStatusId = await repo.statusIdByCode(next);
   if (!newStatusId) throw AppError.badRequest(`Неизвестный статус: ${next}`);
 
@@ -178,7 +247,11 @@ async function changeStatus(id, payload, user) {
     performedByName: user ? user.login : null,
     action: ACTION_BY_STATUS[next] || `Статус изменён на ${next}`,
     comment: payload.comment || '',
-    refund: current.status_code === 'WAIT' && REFUNDING.includes(next),
+    refund: HOLDING.includes(current.status_code) && REFUNDING.includes(next),
+    // Примечание модератора живёт у заявки, а не только в истории:
+    // инициатор должен видеть его в карточке. При повторной отправке
+    // очищается — замечание отработано.
+    revisionNote: next === 'REVISION' ? String(payload.comment).trim() : (next === 'WAIT' ? null : undefined),
   });
 
   const updated = await getOne(id);
@@ -209,9 +282,20 @@ async function remove(id, user) {
   };
 }
 
+/**
+ * Повторная отправка доработанной заявки инициатором.
+ *
+ * Отдельным маршрутом по той же причине, что и отзыв: у инициатора нет
+ * права moderate, а PATCH закрыт именно им. Владельца проверяет
+ * changeStatus.
+ */
+async function resubmit(id, payload, user) {
+  return changeStatus(id, { status: 'WAIT', comment: payload.comment || '' }, user);
+}
+
 /** Отзыв заявки инициатором — отдельное действие под правом withdraw. */
 async function withdraw(id, payload, user) {
   return changeStatus(id, { status: 'CANCEL', comment: payload.comment || '' }, user);
 }
 
-module.exports = { list, getOne, create, changeStatus, withdraw, remove, TRANSITIONS };
+module.exports = { list, getOne, create, changeStatus, withdraw, resubmit, remove, scopeFor, TRANSITIONS };

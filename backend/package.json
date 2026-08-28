@@ -15,10 +15,12 @@
     "db:seed": "node seeds/seed-employees.js",
     "db:seed:users": "node seeds/seed-users.js",
     "db:seed:ratings": "node seeds/seed-ratings.js",
-    "db:seed:all": "npm run db:seed && npm run db:seed:users && npm run db:seed:ratings && npm run db:seed:merits",
+    "db:seed:all": "npm run db:seed && npm run db:seed:users && npm run db:seed:ratings && npm run db:seed:merits && npm run db:seed:refs",
     "db:seed:merits": "node seeds/seed-merits.js",
     "db:rank": "node scripts/recompute-ranks.js",
-    "test": "node --test --test-concurrency=1 \"tests/*.test.js\""
+    "test": "node --test --test-concurrency=1 \"tests/*.test.js\"",
+    "db:seed:refs": "node seeds/seed-refs.js",
+    "db:departments": "node scripts/build-departments.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

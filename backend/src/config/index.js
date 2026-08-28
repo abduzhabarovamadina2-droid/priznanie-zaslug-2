@@ -26,6 +26,7 @@ const config = {
     employeesPath: process.env.SEED_EMPLOYEES_PATH || '../frontend/employees.json',
     ratingsPath: process.env.SEED_RATINGS_PATH || '../frontend/Рейтинг.json',
     meritsPath: process.env.SEED_MERITS_PATH || '../frontend/merits.json',
+    refsPath: process.env.SEED_REFS_PATH || '../frontend/refs.json',
   },
   missingEnv: missing,
   isProd: (process.env.NODE_ENV || 'development') === 'production',

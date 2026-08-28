@@ -42,6 +42,17 @@ module.exports = async function requireAuth(req, _res, next) {
     if (!user) return next(new AppError('Пользователь не найден', 401));
     if (!user.is_active) return next(new AppError('Учётная запись деактивирована', 403));
 
+    // Токены, выданные до черты отзыва, не принимаем. Черта двигается при
+    // выходе, смене пароля и отключении учётной записи — иначе выданный
+    // токен жил бы до конца срока, что бы с человеком ни случилось.
+    // iat в секундах, отметка в базе — в миллисекундах.
+    if (user.tokens_valid_from) {
+      const validFrom = Math.floor(new Date(user.tokens_valid_from).getTime() / 1000);
+      if (payload.iat < validFrom) {
+        return next(new AppError('Токен отозван. Войдите в Систему заново', 401));
+      }
+    }
+
     req.user = user;
     req.token = { issuedAt: payload.iat, expiresAt: payload.exp };
     return next();
